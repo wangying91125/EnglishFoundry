@@ -486,7 +486,10 @@ class SiteStory:
     @property
     def role_pages(self) -> list[dict[str, str]]:
         """本篇适配的角色及其角色页链接。"""
-        return [{"key": key, "name": self.role_names.get(key, _humanize(key)), "href": f"role/{_page_name(key)}.html"} for key in self.roles]
+        return [
+            {"key": key, "name": self.role_names.get(key, _humanize(key)), "href": f"role/{_page_name(key)}.html"}
+            for key in self.roles
+        ]
 
     @property
     def audio_label(self) -> str:
@@ -617,7 +620,14 @@ def _normalize_levels(value: Any, fallback_title: str) -> list[dict[str, Any]]:
         code = _as_text(level).upper()
         words = count_words(body)
         levels.append(
-            {"level": code, "title": title, "body": body, "words": words, "minutes": _minutes(words), "hint": LEVEL_HINTS.get(code, "")}
+            {
+                "level": code,
+                "title": title,
+                "body": body,
+                "words": words,
+                "minutes": _minutes(words),
+                "hint": LEVEL_HINTS.get(code, ""),
+            }
         )
     return levels
 
@@ -877,7 +887,15 @@ def load_audio_clips(
     for path in sorted(root.glob("*.mp3")):
         if path.name in taken or path.stat().st_size <= 0:
             continue
-        clips.append(AudioClip(key=path.stem, filename=path.name, label=_clip_label(path.stem, names), size=path.stat().st_size, path=path))
+        clips.append(
+            AudioClip(
+                key=path.stem,
+                filename=path.name,
+                label=_clip_label(path.stem, names),
+                size=path.stat().st_size,
+                path=path,
+            )
+        )
     log.info("音频：%s 段可用（%s）", len(clips), loaded.rel(root))
     return clips
 
@@ -1125,7 +1143,12 @@ PIPELINE_STAGES: tuple[tuple[str, str, str], ...] = (
 )
 
 
-def _stats_for(stories: Sequence[SiteStory], roles: Mapping[str, Role], platforms: Mapping[str, Platform], clips: Sequence[AudioClip]) -> dict[str, Any]:
+def _stats_for(
+    stories: Sequence[SiteStory],
+    roles: Mapping[str, Role],
+    platforms: Mapping[str, Platform],
+    clips: Sequence[AudioClip],
+) -> dict[str, Any]:
     return {
         "stories": len(stories),
         "roles": len(roles),
@@ -1220,6 +1243,46 @@ def _category_facet(stories: Sequence[SiteStory]) -> list[dict[str, Any]]:
     ]
 
 
+def _role_card(role: Role, count: int = 0) -> dict[str, Any]:
+    """角色在首页 / about / 角色页上的统一形状。"""
+    return {
+        "key": role.key,
+        "name": role.name,
+        "emoji": role.emoji,
+        "levels": list(role.levels),
+        "tone": role.tone,
+        "focus": role.focus,
+        "modules": list(role.modules),
+        "word_limit": role.word_limit,
+        "href": f"role/{_page_name(role.key)}.html",
+        "count": count,
+    }
+
+
+def _platform_card(platform: Platform) -> dict[str, Any]:
+    """平台在 about / 角色页表格里的形状。"""
+    return {
+        "key": platform.key,
+        "name": platform.name,
+        "emoji": platform.emoji,
+        "format": platform.format,
+        "notes": platform.notes,
+        "limit": platform.char_limit,
+        "unit": platform.unit,
+        "language": platform.language,
+    }
+
+
+def _source_card(entry: Mapping[str, Any]) -> dict[str, Any]:
+    """信源在 about 页列表里的形状（只列 enabled 的源）。"""
+    return {
+        "name": _as_text(entry.get("name"), _as_text(entry.get("id"), "source")),
+        "category": _as_text(entry.get("category"), FALLBACK_CATEGORY),
+        "url": _as_text(entry.get("url")),
+        "type": _as_text(entry.get("type"), "rss"),
+    }
+
+
 def _write_page(env: Environment, template: str, target: Path, context: Mapping[str, Any]) -> Path:
     rendered = env.get_template(template).render(**context)
     if not rendered.endswith("\n"):
@@ -1311,17 +1374,7 @@ def build_site(
             "featured": stories[0] if stories else None,
             "categories": _category_facet(stories),
             "role_catalog": [
-                {
-                    "key": key,
-                    "name": role.name,
-                    "emoji": role.emoji,
-                    "tone": role.tone,
-                    "levels": list(role.levels),
-                    "focus": role.focus,
-                    "href": f"role/{_page_name(key)}.html",
-                    "count": sum(1 for story in stories if key in story.roles),
-                }
-                for key, role in roles.items()
+                _role_card(role, count=sum(1 for story in stories if key in story.roles)) for key, role in roles.items()
             ],
             "clips": clips,
         }
@@ -1342,18 +1395,9 @@ def build_site(
                     stats=stats,
                     generated=generated,
                 ),
-                "roles_table": [
-                    {"key": key, "name": role.name, "emoji": role.emoji, "levels": list(role.levels), "tone": role.tone, "focus": role.focus, "word_limit": role.word_limit, "href": f"role/{_page_name(key)}.html", "modules": list(role.modules)}
-                    for key, role in roles.items()
-                ],
-                "platform_table": [
-                    {"key": key, "name": platform.name, "emoji": platform.emoji, "format": platform.format, "limit": platform.char_limit, "unit": platform.unit, "language": platform.language, "notes": platform.notes}
-                    for key, platform in platforms.items()
-                ],
-                "sources": [
-                    {"name": _as_text(entry.get("name"), _as_text(entry.get("id"), "source")), "category": _as_text(entry.get("category"), FALLBACK_CATEGORY), "url": _as_text(entry.get("url")), "type": _as_text(entry.get("type"), "rss")}
-                    for entry in loaded.enabled_sources()
-                ],
+                "roles_table": [_role_card(role) for role in roles.values()],
+                "platform_table": [_platform_card(platform) for platform in platforms.values()],
+                "sources": [_source_card(entry) for entry in loaded.enabled_sources()],
                 "last_run": _last_run(loaded),
                 "clips": clips,
                 "audio_dir": loaded.rel(loaded.output.audio),
@@ -1403,10 +1447,7 @@ def build_site(
             "stories": picked,
             "others": others[:12],
             "scores": {story.id: round(story.role_scores.get(key, 0.0), 2) for story in picked},
-            "platforms_table": [
-                {"key": platform_key, "name": platform.name, "emoji": platform.emoji, "format": platform.format, "limit": platform.char_limit}
-                for platform_key, platform in platforms.items()
-            ],
+            "platforms_table": [_platform_card(platform) for platform in platforms.values()],
             "categories": _category_facet(stories),
         }
         role_pages.append(_write_page(env, "role.html", target / "role" / f"{_page_name(key)}.html", context))
@@ -1436,7 +1477,7 @@ def build_site(
 def _main(argv: Sequence[str] | None = None) -> int:
     """渲染站点并打印文件清单：``python -m foundry.site``（可加 ``--packs`` / ``--limit``）"""
     parser = argparse.ArgumentParser(description="把 output/ 产物渲染成 web/ 静态站点（Jinja2，纯静态、无后端、无 CDN）")
-    parser.add_argument("--packs", metavar="PATH", action="append", default=[], help="只用这些母版 JSON（可重复；默认读 output/packs/*.json）")
+    parser.add_argument("--packs", metavar="PATH", action="append", default=[], help="只用这些母版 JSON（可重复）")
     parser.add_argument("--out", metavar="DIR", help="站点输出目录（默认 settings 的 paths.web）")
     parser.add_argument("--posts", metavar="DIR", help="角色/平台文案目录（默认 output/posts）")
     parser.add_argument("--audio", metavar="DIR", help="音频目录（默认 output/audio）")

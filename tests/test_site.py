@@ -186,7 +186,10 @@ def test_story_page_has_every_module(settings):
 
 def test_story_page_links_role_and_neighbours(settings):
     write_pack(project := settings.root, "demo-eu-data-fine", category="news")
-    write_pack(project, "demo-asia-ports", category="tech", title="Asia rebuilds its ports for greener cargo", published="2026-10-26T08:00:00+00:00")
+    write_pack(
+        project, "demo-asia-ports", category="tech", published="2026-10-26T08:00:00+00:00",
+        title="Asia rebuilds its ports for greener cargo",
+    )
     build_site(settings)
     page = read(web_root(project) / "story" / "demo-eu-data-fine.html")
     assert "../role/" in page and "../index.html#library" in page
@@ -256,8 +259,10 @@ def test_role_pages_render_persona_markdown(settings):
 def test_role_page_prefers_posts_markdown_and_platform_copies(settings):
     posts = settings.root / "output" / "posts"
     posts.mkdir(parents=True, exist_ok=True)
-    (posts / "business.md").write_text("# MANUAL-ROLE-DRAFT\n\n| word | 中文 |\n| --- | --- |\n| tariff | 关税 |\n\n<details>\n<summary>答案</summary>\n1. A\n</details>\n", encoding="utf-8")
-    (posts / "business" ).mkdir(exist_ok=True)
+    draft = "# MANUAL-ROLE-DRAFT\n\n| word | 中文 |\n| --- | --- |\n| tariff | 关税 |\n\n"
+    draft += "<details>\n<summary>答案</summary>\n1. A\n</details>\n"
+    (posts / "business.md").write_text(draft, encoding="utf-8")
+    (posts / "business").mkdir(exist_ok=True)
     (posts / "business" / "xiaohongshu.md").write_text("MANUAL-PLATFORM-COPY 🍠 3 个词\n", encoding="utf-8")
     build_site(settings, packs=[FIXTURE])
     page = read(web_root(settings.root) / "role" / "business.html")
@@ -472,4 +477,4 @@ def test_collect_stories_sorts_and_tags(settings):
     assert stories[0].title == "Newer container story"
     assert stories[0].roles and "container" in stories[0].search
     assert [story.id for story in collect_stories(settings, limit=1)] == ["demo-new"]
-    assert collect_stories(settings, packs=[] ) == []
+    assert collect_stories(settings, packs=[]) == []
