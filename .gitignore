@@ -6,6 +6,5 @@ __pycache__/
 *.egg-info/
 output/audio/
 output/raw/
-web/audio/
 .foundry-state/
 .DS_Store
