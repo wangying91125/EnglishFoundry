@@ -10,6 +10,7 @@
 pip install -e ".[dev]"      # 以 src 布局安装 foundry 包 + pytest
 cp .env.example .env         # 填入你的百炼 Key（.env 已被 .gitignore 忽略）
 python -c "from foundry.config import load_settings; print(load_settings().llm.base_url)"
+python scripts/run_daily.py --dry-run --limit 2   # 离线跑通全流程，产出 web/index.html
 pytest                       # 离线单测
 ```
 
@@ -138,6 +139,24 @@ python -m foundry.site --limit 2 --no-audio                       # 冒烟：只
 - 角色标签来自 `topic_match()` 的题材契合度（命中关键词才标，全都没命中时按难度偏好回退），首页角色筛选与角色页内容用的是同一份归属关系；坏 JSON、缺配置、缺音频都只降级并告警，单篇失败不拖垮整站。
 - 重建默认清理 `web/story` / `web/role` / `web/audio` 里上一版遗留的产物（`--no-prune` 保留），模板目录永不动。
 
+## 端到端流水线
+
+```bash
+python scripts/run_daily.py --dry-run --limit 2      # 离线冒烟：不联网、不调 LLM、不花钱
+python scripts/run_daily.py                          # 真实日更：抓取 + 生成母版 + 配音 + 重建站点
+python scripts/run_daily.py --roles business,kids --platforms weibo,x --no-tts
+python scripts/run_daily.py --dry-run --json -q      # 只要机器可读的运行摘要
+python -m foundry.pipeline --dry-run --limit 2       # 等价入口（脚本只是它的命令行外壳）
+```
+
+- `pipeline.run(limit=None, roles=None, platforms=None, with_tts=True, dry_run=False)` 按 fetch → normalize → master → roles → platforms → (tts) → site 串联，只负责顺序、落盘与记账，业务逻辑仍留在各自模块里（想单跑任何一段，直接调那个模块）。
+- 每个 Story 的产出：`output/packs/<story_id>.json`（母版，pipeline 会把 Story 的标题/来源/时间/标签补进 `meta`，站点与平台文案才有真实出处）、`output/posts/<story_id>/<role>.md`（角色 Markdown）、`output/posts/<story_id>/<role>/<platform>.md`（平台文案）、`output/audio/<story_id>-listening.mp3`（听力稿配音），最后 `build_site()` 重建 `web/`。
+- 平台文案放在 `<story_id>/` 下而不是 `posts/<role>/<platform>.md`：`discover_posts()` 靠目录名认领归属，多篇故事共用一个角色目录会互相覆盖，站点只能看到最后写入的那一篇（两种布局它都认）。
+- `dry_run=True` 全程离线：fetch / master 改用包内素材 `src/foundry/fixtures/dry_run.json`（4 篇示例文章正好聚成 2 个事件，两份合格母版模板，文章的 `age_hours` 每次运行按当前时间折算，所以永远过时效过滤），tts 只写占位 mp3；roles / platforms / site 是纯函数照常真跑，因此 `--dry-run` 也能产出一个内容完整的站点。素材里两份模板靠 `event` 与文章对应，验收时能看到两个不同故事，而不是同一篇复制两遍。
+- `limit` 截断的是 Story 数（同时透传给 `build_site(limit=...)`）；`roles` / `platforms` 接受逗号串或列表，大小写、连字符、下划线都不敏感（`IELTS-Toefl` == `ielts_toefl`，`short-video` == `shortvideo`），写了不认识的名字直接 `PipelineError` 报错并给可用清单；`min_topic_match`（默认 0，即全部角色都出稿）调高可只给题材契合的角色出稿。
+- 失败隔离：单个源、单篇母版、单个角色、单个平台、单条配音出错都只记进 `failures` 并继续，`output/last_run.json` 留痕；摘要前 10 项就是 About 页 “Last pipeline run” 表格里显示的内容（顺序有意义）。
+- `scripts/run_daily.py` 退出码：`0` 全部成功，`1` 跑完了但有失败项，`2` 没跑起来（未知角色/平台、配置读不出、素材缺失、`--limit <= 0` 等用法错误），`130` Ctrl-C。`output/raw/articles.json` 与 `stories.json` 只在真实抓取时写，dry-run 不会盖掉上一版的原始数据。
+
 ## 目录结构
 
 - `src/foundry/config.py`：`load_settings()` 返回带属性的配置对象（`llm` / `tts` / `fetch` / `normalize` / `output` / `enabled_sources()`）。
@@ -148,10 +167,11 @@ python -m foundry.site --limit 2 --no-audio                       # 冒烟：只
 - `src/foundry/platforms.py`：`load_platforms()` / `render_for_platform(role_markdown, meta, platform_key)` / `render_all_platforms()`，6 平台适配文案（不联网、不调 LLM 的纯函数）。
 - `src/foundry/tts.py`：`synth_one(text, out_path, voice, rate)`（异步）/ `batch_synth(items, out_dir)`（同步包装）/ `speech_text()` / `write_manifest()`，edge-tts 免费配音。
 - `src/foundry/site.py`：`build_site(settings)` / `collect_stories`（公开为 `story_from_pack` + `load_packs`）/ `load_audio_clips()` / `discover_posts()` / `markdown_to_html()`，把 `output/` 产物渲染成 `web/` 静态站点并返回文件清单。
-- 后续模块：`pipeline`。
+- `src/foundry/pipeline.py`：`run(limit, roles, platforms, with_tts, dry_run)` 端到端编排 + `output/last_run.json` 运行摘要；`src/foundry/fixtures/dry_run.json` 是 dry-run 离线素材（随包安装）。
+- `scripts/run_daily.py`：每日运行的命令行入口（`--limit` / `--roles` / `--platforms` / `--min-topic-match` / `--no-tts` / `--dry-run` / `--json`），退出码反映成功与失败，可直接给 cron 或 GitHub Actions 用。
 - `output/`：产物目录（`packs/` `posts/` `audio/` `raw/` `last_run.json`，`raw/` 下放抓取的 `articles.json` 与聚合的 `stories.json`）；`web/`：静态站点（生成物 `index.html` `about.html` `story/` `role/` `static/` `audio/` + 模板 `web/templates/`）。
 - `prompts/master.md`：母版生成的 LLM 提示词；`prompts/build/`：分模块任务指令。
-- `tests/`：pytest 用例（全部离线可跑，`tests/test_tts.py` 里 monkeypatch 掉 `edge_tts.Communicate`，`tests/fixtures/sample_pack.json` 是母版样例；`tests/test_platforms.py` 用同一份角色 Markdown 验收 6 个平台的长度与格式；`tests/test_site.py` 在临时项目根里跑 `build_site`，验收首页筛选/搜索索引、详情页九板块、音频下载、角色页认领与 Markdown 转义）。
+- `tests/`：pytest 用例（全部离线可跑，`tests/test_tts.py` 里 monkeypatch 掉 `edge_tts.Communicate`，`tests/fixtures/sample_pack.json` 是母版样例；`tests/test_platforms.py` 用同一份角色 Markdown 验收 6 个平台的长度与格式；`tests/test_site.py` 在临时项目根里跑 `build_site`，验收首页筛选/搜索索引、详情页九板块、音频下载、角色页认领与 Markdown 转义；`tests/test_pipeline.py` 用 dry-run 素材跑完整流水线（并 monkeypatch 掉 fetch/master/tts 证明一次网都没出），验收产出形状、参数生效、失败隔离与摘要键顺序；`tests/test_run_daily.py` 覆盖命令行的参数透传、退出码与一次真子进程 `--dry-run` 冒烟）。
 
 ## 云端保存与断点恢复
 
