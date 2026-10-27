@@ -139,7 +139,7 @@ def test_pack_for_story_follows_event_and_adds_meta(settings):
     for story, pack in zip(stories, packs):
         assert pack.story_id == story.id
         assert pack.data["meta"]["title"] == story.title
-        assert pack.data["meta"]["source"] == story.source
+        assert set(pack.data["meta"]["source"].split(", ")) == {item.source for item in story.articles}
         assert pack.data["meta"]["published"] == story.published.isoformat()
         assert pack.data["tags"], "标签应从素材文章带进母版"
     ai = next(pack for story, pack in zip(stories, packs) if "AI coding" in story.title)

@@ -396,7 +396,7 @@ def run(
                 pack.write(loaded.output.packs / f"{safe_name(story.id) or story.id}.json")
             else:
                 pack = generate_pack(story, loaded, save=False)
-                apply_story_meta(pack)
+                apply_story_meta(pack, story)
                 pack.write(loaded.output.packs / f"{safe_name(pack.story_id) or pack.story_id}.json")
         except Exception as error:  # noqa: BLE001 - 一篇母版失败不影响下一篇
             fail("master", f"Story {story.id}", error)
