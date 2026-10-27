@@ -36,6 +36,7 @@ from __future__ import annotations
 import copy
 import json
 import logging
+import re
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -130,15 +131,24 @@ def _split_keys(value: Any) -> list[str]:
     return keys
 
 
+def _canonical_key(value: Any) -> str:
+    """key 的宽松写法：忽略大小写、连字符、下划线与空格（``IELTS-Toefl`` == ``ielts_toefl``）。"""
+    return re.sub(r"[^a-z0-9]", "", _as_text(value).lower())
+
+
 def _select_keys(value: Any, table: Mapping[str, Any], label: str) -> list[str]:
     """校验并排序用户点名的 key；没点名就给全部（按配置顺序）。"""
     requested = _split_keys(value)
     if not requested:
         return list(table)
-    unknown = [key for key in requested if key not in table]
+    index = {}
+    for key in table:
+        index.setdefault(_canonical_key(key), key)
+    picked = {index.get(_canonical_key(item)) for item in requested}
+    unknown = sorted(item for item in requested if _canonical_key(item) not in index)
     if unknown:
         raise PipelineError(f"未知{label}：{', '.join(unknown)}（可用：{', '.join(table)}）")
-    return [key for key in table if key in requested]
+    return [key for key in table if key in picked]
 
 
 def _read_json(path: Path) -> Any:
