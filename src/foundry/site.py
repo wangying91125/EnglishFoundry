@@ -1040,6 +1040,37 @@ def attach_role_bodies(
             }
 
 
+def collect_stories(
+    settings: Settings | None = None,
+    *,
+    packs: Sequence[Any] | None = None,
+    roles: Mapping[str, Role] | None = None,
+    limit: int | None = None,
+) -> list[SiteStory]:
+    """母版 → 排好序的 :class:`SiteStory` 列表（``packs`` 优先，否则读 ``output/packs/*.json``）。
+
+    只做“读 + 组装 + 按时间倒序 + 截断”，不碰音频与 posts，也不渲染角色正文：
+    流水线想统计产出、或单测想看数据形状时用它，比跑一整个 :func:`build_site` 便宜得多。
+    """
+    loaded = settings if settings is not None else load_settings()
+    table = roles if roles is not None else _config_tables(loaded)[0]
+    items = list(packs) if packs is not None else load_packs(_resolve(loaded, None, str(loaded.output.packs)))
+    stories: list[SiteStory] = []
+    for item in items:
+        coerced = _coerce_pack(item)
+        if coerced is None:
+            continue
+        try:
+            stories.append(story_from_pack(coerced, roles=table, settings=loaded))
+        except Exception as error:  # 单个母版坏掉不影响整站
+            log.warning("母版 %s 组装失败，跳过：%s", getattr(coerced, "story_id", "?"), error)
+    stories.sort(key=lambda story: (story.published or datetime.min.replace(tzinfo=timezone.utc), story.id), reverse=True)
+    if limit is not None and limit >= 0:
+        stories = stories[:limit]
+    log.info("母版：%s 篇可用", len(stories))
+    return stories
+
+
 # ---------------------------------------------------------------- 模板与渲染
 def template_dir(settings: Settings | None = None) -> Path:
     """模板目录：项目 ``web/templates`` 优先，其次包内同路径；两处都没有才报错。"""
@@ -1247,19 +1278,7 @@ def build_site(
     templates = template_dir(loaded)
     roles, platforms = _config_tables(loaded)
 
-    raw_packs = list(packs) if packs is not None else load_packs(_resolve(loaded, None, str(loaded.output.packs)))
-    stories: list[SiteStory] = []
-    for item in raw_packs:
-        coerced = _coerce_pack(item)
-        if coerced is None:
-            continue
-        try:
-            stories.append(story_from_pack(coerced, roles=roles, settings=loaded))
-        except Exception as error:  # 单个母版坏掉不影响整站
-            log.warning("母版 %s 组装失败，跳过：%s", getattr(coerced, "story_id", "?"), error)
-    stories.sort(key=lambda story: (story.published or datetime.min.replace(tzinfo=timezone.utc), story.id), reverse=True)
-    if limit is not None and limit >= 0:
-        stories = stories[:limit]
+    stories = collect_stories(loaded, packs=packs, roles=roles, limit=limit)
 
     posts = discover_posts(
         posts_dir,
