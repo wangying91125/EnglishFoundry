@@ -439,6 +439,7 @@ class SiteStory:
     quiz: list[dict[str, Any]] = field(default_factory=list)
     audio: list[AudioClip] = field(default_factory=list)
     roles: list[str] = field(default_factory=list)
+    role_names: dict[str, str] = field(default_factory=dict)
     role_scores: dict[str, float] = field(default_factory=dict)
     role_bodies: dict[str, dict[str, Any]] = field(default_factory=dict)
     path: Path | None = None
@@ -476,6 +477,16 @@ class SiteStory:
     @property
     def has_audio(self) -> bool:
         return bool(self.audio)
+
+    @property
+    def search(self) -> str:
+        """卡片 ``data-search`` 用的检索文本（客户端搜索的全部数据来源）。"""
+        return _search_haystack(self)
+
+    @property
+    def role_pages(self) -> list[dict[str, str]]:
+        """本篇适配的角色及其角色页链接。"""
+        return [{"key": key, "name": self.role_names.get(key, _humanize(key)), "href": f"role/{_page_name(key)}.html"} for key in self.roles]
 
     @property
     def audio_label(self) -> str:
@@ -792,6 +803,7 @@ def _fit_roles(story: SiteStory, roles: Mapping[str, Role]) -> list[str]:
     """按题材契合度给这篇故事打上角色标签（一个都没命中时退回到难度偏好匹配）。"""
     if not roles:
         return []
+    story.role_names = {key: (role.name or _humanize(key)) for key, role in roles.items()}
     scores: dict[str, float] = {}
     for key, role in roles.items():
         try:
@@ -1345,7 +1357,6 @@ def build_site(
                 generated=generated,
             ),
             "story": story,
-            "search": _search_haystack(story),
             "prev": stories[position - 1] if position else None,
             "next": stories[position + 1] if position + 1 < len(stories) else None,
             "more": [item for item in stories if item.id != story.id][:6],
