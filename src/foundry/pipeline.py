@@ -67,7 +67,6 @@ __all__ = [
     "LISTENING_SUFFIX",
     "PLACEHOLDER_MP3",
     "STAGES",
-    "SUMMARY_NAME",
     "PipelineError",
     "dry_run_fixture",
     "fixture_articles",
@@ -83,8 +82,6 @@ log = logging.getLogger("foundry.pipeline")
 STAGES: tuple[str, ...] = ("fetch", "normalize", "master", "roles", "platforms", "tts", "site")
 #: dry-run 素材文件名（放在本包 fixtures/ 下，随包一起安装）
 FIXTURE_NAME = "dry_run.json"
-#: 运行摘要文件名
-SUMMARY_NAME = "last_run.json"
 #: 每篇故事的听力音频 key 后缀（站点靠 story_id 前缀认领音频）
 LISTENING_SUFFIX = "listening"
 #: 题材契合度门槛：0.0 = 所有配置角色都出稿；>0 时按 topic_match 筛角色
@@ -150,8 +147,11 @@ def _select_keys(value: Any, table: Mapping[str, Any], label: str) -> list[str]:
     return [key for key in table if key in picked]
 
 
-def _read_json(path: Path) -> Any:
-    return json.loads(path.read_text(encoding="utf-8"))
+def _read_json(path: Path, *, label: str = "JSON") -> Any:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        raise PipelineError(f"读不出{label} {path}：{error}") from error
 
 
 def _write_json(path: Path, payload: Any) -> Path:
@@ -166,7 +166,7 @@ def dry_run_fixture(path: str | Path | None = None) -> dict[str, Any]:
     target = Path(path) if path is not None else Path(__file__).resolve().parent / "fixtures" / FIXTURE_NAME
     if not target.is_file():
         raise PipelineError(f"缺少 dry-run 素材：{target}（正常安装应随包提供 fixtures/{FIXTURE_NAME}）")
-    payload = _read_json(target)
+    payload = _read_json(target, label="dry-run 素材")
     if not isinstance(payload, dict) or not payload.get("articles") or not payload.get("packs"):
         raise PipelineError(f"dry-run 素材格式不对：{target} 需要同时含 articles 与 packs")
     return payload
@@ -206,7 +206,6 @@ def pack_for_story(
     fixture: Mapping[str, Any],
     *,
     index: int = 0,
-    path: str | Path | None = None,
 ) -> ContentPack:
     """素材里的母版模板 → 这篇 Story 的 ``ContentPack``（不调 LLM）。
 
@@ -229,7 +228,7 @@ def pack_for_story(
         template = templates[index % len(templates)]
         log.debug("Story %s 没匹配到 dry-run 模板，按序号用 %s", story.id, _as_text(template.get("event")))
     data = {key: copy.deepcopy(value) for key, value in template.items() if key not in {"event", "story_id"}}
-    pack = ContentPack(story_id=story.id, data=data, path=Path(path) if path is not None else None)
+    pack = ContentPack(story_id=story.id, data=data)
     apply_story_meta(pack, story)
     return pack
 
