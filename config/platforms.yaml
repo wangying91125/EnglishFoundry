@@ -1,0 +1,90 @@
+# EnglishFoundry 平台配置：一份角色 Markdown → 6 个平台的适配文案
+#
+# 说明：
+#   * 本文件会被 config.py 一并合并进 settings.raw["platforms"]；渲染请用 foundry.platforms.load_platforms()。
+#   * 每个平台的字段（约定 8 项 + 3 项扩展）：
+#       key         平台标识（也用作文件名，小写下划线）
+#       name        展示名
+#       format      内容形态一句话（由 platforms.py 里对应的 builder 实现）
+#       title_rule  标题/首行钩子规则
+#       char_limit  文案长度硬上限，按 unit 计：超了就逐档降级（减词 → 去释义 → 只保骨架）
+#       emoji       平台标志 emoji（进标题/首行）
+#       hashtags    固定话题标签池（命中关键词生成的动态标签追在其后，总数受 notes 上限约束）
+#       notes       编辑须知（语速/计数口径/标签数等，--list 会原样展示）
+#     扩展字段：
+#       language    zh = 中文框架 + 英文学习内容；en = 全英文（不许漏出中文注释）
+#       unit        计数单位：chars = 字符数（换行不计，中文一字/英文一字母/emoji 各 1）；words = 词数
+#       char_min    长文平台的目标下限（只作档位选择目标，不硬造废话凑长）
+platforms:
+  xiaohongshu:
+    key: xiaohongshu
+    name: 小红书
+    language: zh
+    unit: chars
+    char_limit: 600
+    emoji: 🍠
+    title_rule: "钩子标题 ≤22 字：emoji 开头 + 数字/惊叹 + 「N 个词」承诺，首行末尾带一条英文钩子句"
+    hashtags: [英语学习, 外刊精读, 每日英语打卡]
+    format: "钩子标题 + 英文头条原文 + 一句话事件 + 分点词卡（词+中文+短例句）+ 互动提问 + 话题标签"
+    notes: "干货/合集口吻，中文框架短句多 emoji；英文学习内容必须原样引用；话题标签 3-6 个"
+
+  wechat_mp:
+    key: wechat_mp
+    name: 微信公众号
+    language: zh
+    unit: chars
+    char_limit: 3000
+    emoji: 📰
+    title_rule: "主标题 ≤30 字（中文设问/悬念）+ 英文原标题作副题"
+    hashtags: []
+    format: "深度长文：导语 → 事件原文（英文）→ 中文背景 → 核心词汇精讲 → 长难句拆解 → 听力口语 → 写作练习 → 收尾任务"
+    notes: "小标题分层（# / ##），每节先给英文原文再给中文讲评；结尾附阅读原文链接与「在看/收藏」引导"
+
+  shortvideo:
+    key: shortvideo
+    name: 短视频口播
+    language: zh
+    unit: chars
+    char_limit: 320
+    emoji: 🎬
+    title_rule: "前 3 秒钩子一行读完：数字/疑问开场 + 「30 秒听懂」承诺"
+    hashtags: [英语口语, 外刊听力, 每日英语打卡]
+    format: "30-60 秒口语逐字稿：【钩子】→【英文原句跟读】→【中文串讲】→【3 个核心词】→【结尾引导关注】"
+    notes: "按 ~5.5 字/秒的口播节奏，60 秒 ≤320 字；全部短句，不出现表格/Markdown 语法；English 句要读得出口"
+
+  weibo:
+    key: weibo
+    name: 微博
+    language: zh
+    unit: chars
+    char_limit: 140
+    emoji: 🔥
+    title_rule: "无独立标题：#话题# 开头 + 一句话中文结论"
+    hashtags: [英语, 外刊]
+    format: "140 字内微博：#话题# + 一句话 + 英文关键词（中文）若干 + 短链"
+    notes: "含标点、标签与链接总字数 ≤140；#话题# 放最前不许被截断；放不下先砍词表再砍正文，最后截链接"
+
+  x:
+    key: x
+    name: X / Twitter
+    language: en
+    unit: chars
+    char_limit: 280
+    emoji: 🌐
+    title_rule: "首行即钩子：英文原标题压成一行（超 90 字符先砍句子后截词）"
+    hashtags: [LearnEnglish, EnglishNews]
+    format: "单条推文：英文一行新闻 + 一句关键事实 + Today's words 词单 + 1-2 个 hashtag"
+    notes: "全英文单帖；≤280 字符（len 保守计数，emoji 按 2 码点算，不会超）；hashtag 1-2 个，不堆标签、不出现中文"
+
+  linkedin:
+    key: linkedin
+    name: LinkedIn
+    language: en
+    unit: words
+    char_limit: 600
+    char_min: 300
+    emoji: 💼
+    title_rule: "首行职业钩子 ≤12 词：数字或设问开头（What it means for you…）"
+    hashtags: [LanguageLearning, EnglishForProfessionals, CrossBorderBusiness]
+    format: "专业长帖：hook → What happened → Why it matters → Vocabulary spotlight（释义+例句）→ Structure to copy → Discussion → CTA → hashtags"
+    notes: "全英文专业语气，少用 emoji；正文 300-600 词（按词计），超上限先砍例句再砍词数；结尾必须有 follow/订阅 CTA"

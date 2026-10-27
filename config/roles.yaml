@@ -1,0 +1,270 @@
+# EnglishFoundry 角色配置：一份母版（ContentPack）→ 12 个角色的差异化 Markdown
+#
+# 说明：
+#   * 本文件会被 config.py 一并合并进 settings.raw["roles"]；渲染请用 foundry.roles.load_roles()。
+#   * 每个角色的字段：
+#       key        角色标识（也用作目录名，小写下划线）
+#       name       展示名（中文）
+#       levels     偏好的 CEFR 难度，可多个；按顺序取母版里存在的第一个，全都没有就就近回退
+#       modules    从 ContentPack 取用的键（levels/bilingual/vocabulary/grammar/background_zh/
+#                  listening_script/speaking/writing/quiz，支持 vocab、reading 之类别名）
+#       tone       讲解风格，原样写进产出开头，也约束下游 platforms 的语气
+#       word_limit 整篇 Markdown 的词数硬上限（英文按词、中文按字计），超出按优先级压缩
+#       extra      角色专属旋钮：正文词数、各段条数、题材关键词、结尾任务、配音提示……
+#   * extra.keywords 是该角色“想看的题材”，命中的词在词汇表里加粗，并给出 topic_match() 契合度。
+roles:
+  k12:
+    key: k12
+    name: 中小学 K12
+    levels: [A2, B1]
+    modules: [levels, bilingual, vocabulary, grammar, background_zh, quiz]
+    tone: "像课堂讲评：短句、常用词、多鼓励；术语先给中文再给英文，不出现超纲词"
+    word_limit: 1250
+    extra:
+      trim_order: [background_zh, grammar, bilingual, quiz, vocabulary]
+      emoji: 🎒
+      body_words: 140
+      vocab_count: 8
+      grammar_count: 2
+      quiz_count: 4
+      bilingual_count: 5
+      focus: 中考高频词 + 一般过去时/被动语态入门
+      keywords: [school, student, teacher, child, family, learn, food, water, weather, day]
+      cta: "今日任务：朗读正文 2 遍，8 个单词各造一个句子，错题抄进积累本。"
+      tts_voice: us_female
+      tts_rate: "-10%"
+
+  postgrad:
+    key: postgrad
+    name: 考研英语
+    levels: [B2, C1]
+    modules: [levels, bilingual, vocabulary, grammar, background_zh, quiz, writing]
+    tone: "真题教研口吻：逐句精读、点明熟词僻义与同义替换，每题答案都给出处句"
+    word_limit: 1900
+    extra:
+      trim_order: [background_zh, writing, quiz, vocabulary]
+      emoji: 📚
+      body_words: 200
+      vocab_count: 12
+      grammar_count: 3
+      quiz_count: 5
+      bilingual_count: 6
+      explain_chars: 90
+      essay_words: 120
+      focus: 长难句拆解（先抓主干）+ 阅读题同义替换
+      keywords: [policy, law, regulation, economy, court, government, company, market, report, data]
+      cta: "今日任务：手写全文译文，标出 3 处从句嵌套，整理 12 个词的同义替换。"
+      tts_voice: uk_female
+      tts_rate: "+0%"
+
+  cet:
+    key: cet
+    name: 四六级
+    levels: [B1, B2]
+    modules: [levels, vocabulary, bilingual, grammar, listening_script, quiz]
+    tone: "备考教练：先给可背的词块，再讲听力信号词，强调 60 秒内的信息密度"
+    word_limit: 1230
+    extra:
+      trim_order: [bilingual, grammar, listening_script, quiz, vocabulary]
+      emoji: 🎧
+      body_words: 160
+      vocab_count: 10
+      grammar_count: 2
+      quiz_count: 5
+      bilingual_count: 5
+      listening_words: 90
+      focus: 四级高频词块 + 听力/阅读定位信号词
+      keywords: [data, privacy, user, app, service, platform, fine, rule, money, daily]
+      cta: "今日任务：听力稿先盲听做题，再对照文本精听一遍，记下 5 处连读。"
+      tts_voice: us_male
+      tts_rate: "+5%"
+
+  ielts_toefl:
+    key: ielts_toefl
+    name: 雅思托福
+    levels: [B2, C1]
+    modules: [levels, vocabulary, grammar, writing, speaking, quiz]
+    tone: "学术应试：按评分维度讲（任务回应/连贯/词汇/语法），示范可直接搬走的句式"
+    word_limit: 1320
+    extra:
+      trim_order: [grammar, quiz, writing, speaking, vocabulary]
+      emoji: 🪁
+      body_words: 180
+      vocab_count: 10
+      grammar_count: 2
+      quiz_count: 4
+      essay_words: 140
+      speaking_questions: 3
+      focus: 话题学术词汇 + 观点展开（claim-reason-example）
+      keywords: [government, regulation, technology, innovation, society, evidence, penalty, privacy, data]
+      cta: "今日任务：用 claim-reason-example 写一段 80 词主体段，再录音回答 3 个口语题。"
+      tts_voice: uk_female
+      tts_rate: "+0%"
+
+  business:
+    key: business
+    name: 商务职场
+    levels: [B1, B2]
+    modules: [levels, vocabulary, bilingual, speaking, writing, quiz]
+    tone: "职场备忘式：先结论后背景，句子短，可直接抄进邮件和会议发言"
+    word_limit: 1250
+    extra:
+      trim_order: [bilingual, writing, quiz, speaking, vocabulary]
+      emoji: 💼
+      body_words: 150
+      vocab_count: 9
+      quiz_count: 4
+      bilingual_count: 4
+      essay_words: 110
+      speaking_questions: 3
+      focus: 汇报/邮件常用表达 + 谈判里的缓和语气（softening）
+      keywords: [company, business, market, cost, revenue, deadline, client, compliance, risk, fine]
+      cta: "今日任务：把这则新闻改写成 3 句英文周报要点 + 1 封给客户的说明邮件。"
+      tts_voice: us_male
+      tts_rate: "+0%"
+
+  trade:
+    key: trade
+    name: 外贸业务员
+    levels: [B1, B2]
+    modules: [levels, vocabulary, bilingual, speaking, quiz]
+    tone: "业务实战：紧扣询盘—报价—交期—索赔链条，句式要能直接发给客户"
+    word_limit: 1280
+    extra:
+      trim_order: [speaking, quiz, vocabulary, bilingual]
+      emoji: 🚢
+      body_words: 140
+      vocab_count: 10
+      quiz_count: 4
+      bilingual_count: 5
+      speaking_questions: 2
+      focus: 商务表达与合规条款（付款条件、关税、单证、违约责任）
+      keywords: [trade, export, import, tariff, customs, shipment, supplier, contract, invoice, payment, transfer, penalty]
+      cta: "今日任务：给客户写一封 120 词邮件，说明新规对交期的影响并给出两个备选方案。"
+      tts_voice: us_female
+      tts_rate: "+0%"
+
+  crossborder:
+    key: crossborder
+    name: 跨境电商
+    levels: [A2, B1]
+    modules: [levels, vocabulary, speaking, writing, quiz]
+    tone: "卖家视角：只用最常用词，短句 + 项目符号，话术可直接贴进 listing 和客服模板"
+    word_limit: 980
+    extra:
+      trim_order: [writing, quiz, speaking, vocabulary]
+      emoji: 🛒
+      body_words: 120
+      vocab_count: 10
+      quiz_count: 3
+      essay_words: 90
+      speaking_questions: 2
+      focus: 平台术语、客服话术与差评/退款处理句式
+      keywords: [seller, platform, customer, refund, shipping, price, store, product, tax, rule, app, data]
+      cta: "今日任务：写一条 40 词站内通知 + 3 句差评安抚话术，用掉今天 5 个词。"
+      tts_voice: us_female
+      tts_rate: "+10%"
+
+  developer:
+    key: developer
+    name: 程序员/技术
+    levels: [B2, C1]
+    modules: [levels, vocabulary, grammar, bilingual, background_zh, quiz]
+    tone: "工程师读文档的方式：直给、结构化、术语准确，不寒暄，讲清机制与影响面"
+    word_limit: 1350
+    extra:
+      trim_order: [background_zh, quiz, vocabulary, bilingual, grammar]
+      emoji: 💻
+      body_words: 170
+      vocab_count: 10
+      grammar_count: 2
+      quiz_count: 4
+      bilingual_count: 4
+      focus: 技术英文阅读（RFC / 事故复盘）+ commit、PR、issue 里的地道表达
+      keywords: [data, server, software, code, api, application, system, security, network, platform, transfer, engineer, algorithm, cloud]
+      cta: "今日任务：用 3 行英文写一份 incident summary（影响 / 根因 / 后续动作）。"
+      tts_voice: us_male
+      tts_rate: "+5%"
+
+  academic:
+    key: academic
+    name: 学术科研
+    levels: [C1, C2]
+    modules: [levels, vocabulary, grammar, background_zh, writing, quiz]
+    tone: "学术语域：名词化表达、hedge（may / approximately）与引用规范，不用口语缩写"
+    word_limit: 1450
+    extra:
+      trim_order: [background_zh, quiz, writing, vocabulary, grammar]
+      emoji: 🎓
+      body_words: 200
+      vocab_count: 12
+      grammar_count: 3
+      essay_words: 150
+      focus: 学术词汇（AWL）+ 摘要结构（背景—方法—结果—意义）
+      keywords: [research, study, evidence, analysis, method, regulation, law, data, transfer, protection, court, penalty]
+      cta: "今日任务：把这则报道改写成 150 词结构化摘要，并列出 3 个可引文献方向。"
+      tts_voice: uk_female
+      tts_rate: "-5%"
+
+  creator:
+    key: creator
+    name: 内容创作者/出海
+    levels: [B1, B2]
+    modules: [levels, vocabulary, listening_script, speaking, writing, quiz]
+    tone: "口播脚本感：前 8 秒给钩子，句子短、口语化，多用问句和具体数字"
+    word_limit: 1080
+    extra:
+      trim_order: [quiz, writing, listening_script, speaking, vocabulary]
+      emoji: 🎬
+      body_words: 130
+      vocab_count: 8
+      listening_words: 80
+      essay_words: 90
+      speaking_questions: 3
+      focus: 英文标题钩子、脚本节奏与评论区互动问句
+      keywords: [app, users, platform, story, video, social, audience, data, privacy, fine]
+      cta: "今日任务：写 3 个英文标题（悬念/数字/反常识各一），再录 60 秒口播。"
+      tts_voice: us_female
+      tts_rate: "+8%"
+
+  immigration:
+    key: immigration
+    name: 移民留学/海外生活
+    levels: [A2, B1]
+    modules: [levels, vocabulary, bilingual, speaking, quiz]
+    tone: "生活场景陪练：每句话都能在柜台、诊所、房东面前直接说出口，附中文对照"
+    word_limit: 1150
+    extra:
+      trim_order: [quiz, bilingual, speaking, vocabulary]
+      emoji: 🛂
+      body_words: 130
+      vocab_count: 10
+      quiz_count: 3
+      bilingual_count: 5
+      speaking_questions: 3
+      focus: 办事/就医/租房/银行/校园场景的高频句与关键名词
+      keywords: [law, rule, government, application, protection, personal, information, privacy, data, fine, official]
+      cta: "今日任务：3 个口语问题各答 30 秒并录音，整理去柜台要问的 5 个英文句子。"
+      tts_voice: au_female
+      tts_rate: "-5%"
+
+  kids:
+    key: kids
+    name: 少儿亲子
+    levels: [A1, A2]
+    modules: [levels, vocabulary, background_zh, speaking, quiz]
+    tone: "讲故事：把新闻讲成小故事，多用比喻和拟声，一句不超过 8 个词，结尾一定要鼓励"
+    word_limit: 880
+    extra:
+      trim_order: [background_zh, quiz, speaking, vocabulary]
+      emoji: 🧒
+      body_words: 80
+      vocab_count: 12
+      quiz_count: 3
+      speaking_questions: 2
+      background_chars: 70
+      focus: 生活高频词优先铺量（词量 > 语法）+ 亲子共读提问
+      keywords: [home, family, friend, school, play, food, water, animal, day, information]
+      cta: "今日任务：和爸爸妈妈一起读完故事，学会 12 个词，再回答 3 个小问题。"
+      tts_voice: us_female
+      tts_rate: "-15%"

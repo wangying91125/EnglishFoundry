@@ -1,0 +1,41 @@
+# EnglishFoundry 运行配置
+# 说明：
+#   * config/*.yaml 会被 src/foundry/config.py 合并（按文件名排序，后者覆盖前者）。
+#   * ${VAR} 或 ${VAR:-默认值} 会被环境变量 / 项目根 .env 展开。
+#   * 环境变量 DASHSCOPE_API_KEY / DASHSCOPE_BASE_URL / FOUNDRY_MODEL 优先级最高。
+#   * 切勿在本文件写入任何密钥明文（本文件会提交进仓库）。
+paths:
+  output: output          # 产物根目录
+  web: web                # 静态站点目录
+  prompts: prompts        # 提示词目录
+  # sources: config/sources.yaml   # 需要换源文件位置时取消注释
+
+fetch:
+  timeout: 20             # 与 sources.yaml 的 defaults 合并，此处优先
+  max_attempts: 3         # tenacity 重试次数
+  backoff: 2.0            # 指数退避基数（秒）
+  limit_per_source: 20    # 单源最多取多少条；null 表示不限制
+
+normalize:
+  max_age_hours: 24       # 只保留最近 N 小时
+  min_english_ratio: 0.6  # 英文字符占比阈值
+  similarity: 0.55        # 同事件聚类相似度阈值
+  max_articles_per_story: 8
+
+llm:
+  provider: dashscope
+  base_url: ${DASHSCOPE_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1}
+  model: ${FOUNDRY_MODEL:-qwen-plus}
+  api_key: ${DASHSCOPE_API_KEY}
+  temperature: 0.4
+  timeout: 120
+  max_retries: 3
+
+tts:
+  voice: en-US-AriaNeural   # 默认口音
+  rate: "+0%"               # 默认语速
+  voices:                   # 可选口音（角色/平台可覆盖）
+    us_female: en-US-AriaNeural
+    us_male: en-US-GuyNeural
+    uk_female: en-GB-SoniaNeural
+    au_female: en-AU-NatashaNeural

@@ -1,0 +1,37 @@
+# EnglishFoundry · 全球实时英文内容工厂
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "foundry"
+version = "0.1.0"
+description = "全球实时英文内容工厂：抓取全球英文源，产出分级阅读、双语、听力、平台文案与配音"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "feedparser>=6.0.10",
+    "requests>=2.31.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=5.0.0",
+    "pyyaml>=6.0",
+    "openai>=1.40.0",
+    "python-dotenv>=1.0.0",
+    "tenacity>=8.2.0",
+    "jinja2>=3.1.0",
+    "edge-tts>=6.1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
