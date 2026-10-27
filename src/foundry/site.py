@@ -931,7 +931,7 @@ def discover_posts(
         else:
             entry = found.setdefault((story_id, role_key), {"markdown": "", "markdown_from": "", "platforms": {}})
             entry["markdown"] = text
-            entry["markdown_from"] = str(path)
+            entry["markdown_from"] = loaded.rel(path)
     log.info("平台/角色文案：认领到 %s 组（%s）", len(found), loaded.rel(root))
     return found
 
