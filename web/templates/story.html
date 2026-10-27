@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% block content %}
+<nav class="crumbs" aria-label="Breadcrumb 面包屑">
+  <a href="{{ root }}index.html">← Today 今日精选</a>
+  <span aria-hidden="true">/</span>
+  <a href="{{ root }}index.html#library">Stories 分级阅读</a>
+  <span aria-hidden="true">/</span>
+  <span class="crumb-current">{{ story.category_en }}</span>
+</nav>
+
+<article class="story">
+  <header class="story-head">
+    <p class="eyebrow">
+      {% if story.date_label %}<time datetime="{{ story.iso_date }}">{{ story.date_label }}</time> ·{% endif %}
+      {{ story.category_en }}{% if story.category_zh %} <span class="zh">{{ story.category_zh }}</span>{% endif %}
+      {%- if story.source %} · {{ story.source }}{% endif %}
+    </p>
+    <h1>{{ story.title }}</h1>
+    {% if story.summary %}<p class="lede">{{ story.summary }}</p>{% endif %}
+    <ul class="pill-row" aria-label="Modules 板块">
+      {% for name in story.sections %}<li class="pill pill-ghost">{{ module_labels[name] }}</li>{% endfor %}
+      {% if story.url %}<li class="pill"><a class="plain-link" href="{{ story.url }}" target="_blank" rel="noopener noreferrer">Original source 原文 ↗</a></li>{% endif %}
+    </ul>
+    {% if story.audio %}
+    <div class="player-card" id="listening">
+      <div class="player-main">
+        <p class="player-label">🎧 Listening 听力 · {{ story.audio[0].label or story.audio[0].key }}</p>
+        <audio controls preload="none" src="{{ root }}{{ story.audio[0].url }}" data-audio></audio>
+        <div class="player-tools" data-speed-group role="group" aria-label="Playback speed 倍速">
+          <span class="speed-label">Speed 倍速</span>
+          <button type="button" class="chip chip-small" data-speed="0.75">0.75×</button>
+          <button type="button" class="chip chip-small is-active" data-speed="1" aria-pressed="true">1×</button>
+          <button type="button" class="chip chip-small" data-speed="1.25">1.25×</button>
+          <button type="button" class="chip chip-small" data-speed="1.5">1.5×</button>
+        </div>
+      </div>
+      <ul class="player-files">
+        {% for clip in story.audio %}
+        <li>
+          <a class="download" href="{{ root }}{{ clip.url }}" download>⬇ {{ clip.filename }}{% if clip.size_label %} · {{ clip.size_label }}{% endif %}</a>
+          {% if clip.duration_label %}<span class="clip-dur">{{ clip.duration_label }}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </header>
+
+  {% if story.levels %}
+  <section class="section" id="reading" aria-labelledby="reading-title">
+    <h2 id="reading-title">Graded reading · 分级阅读</h2>
+    <div class="level-tabs" role="tablist" aria-label="CEFR levels 难度档位">
+      {% for level in story.levels %}
+      <button type="button"
+              role="tab"
+              class="level-tab{% if level.level == story.default_level %} is-active{% endif %}"
+              id="tab-{{ level.level }}"
+              data-level="{{ level.level }}"
+              aria-selected="{% if level.level == story.default_level %}true{% else %}false{% endif %}"
+              aria-controls="level-{{ level.level }}">
+        <b>{{ level.level }}</b>
+        <span class="zh">{{ level.hint or 'CEFR' }}</span>
+        <span class="tab-meta">{{ level.words }} words · {{ level.minutes or '–' }}</span>
+      </button>
+      {% endfor %}
+    </div>
+    {% for level in story.levels %}
+    <section class="level-panel{% if level.level == story.default_level %} is-active{% endif %}"
+             id="level-{{ level.level }}"
+             role="tabpanel"
+             aria-labelledby="tab-{{ level.level }}"
+             data-level-panel="{{ level.level }}">
+      <h3 class="level-title">{{ level.title }}</h3>
+      <p class="level-body">{{ level.body }}</p>
+      <p class="level-foot">CEFR {{ level.level }}{% if level.hint %} · {{ level.hint }}{% endif %} · {{ level.words }} words · about {{ level.minutes or '1' }} min read</p>
+    </section>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if story.background_zh %}
+  <section class="section" id="background" aria-labelledby="background-title">
+    <h2 id="background-title">Background 背景速览</h2>
+    <p class="zh-block">{{ story.background_zh }}</p>
+  </section>
+  {% endif %}
+
+  {% if story.vocabulary %}
+  <section class="section" id="vocabulary" aria-labelledby="vocabulary-title">
+    <h2 id="vocabulary-title">Key words · 核心词汇 <span class="count">{{ story.vocabulary|length }}</span></h2>
+    <div class="table-wrap">
+      <table class="vocab-table">
+        <thead><tr><th scope="col">#</th><th scope="col">Word</th><th scope="col">词性</th><th scope="col">中文</th><th scope="col">English definition</th></tr></thead>
+        <tbody>
+          {% for word in story.vocabulary %}
+          <tr>
+            <td class="num">{{ loop.index }}</td>
+            <th scope="row" class="word">{{ word.word }}</th>
+            <td class="pos">{{ word.pos }}</td>
+            <td class="zh">{{ word.zh }}</td>
+            <td>{{ word.en_def }}{% if word.example %}<span class="example">“{{ word.example }}”</span>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  {% endif %}
+
+  {% if story.bilingual %}
+  <section class="section" id="bilingual" aria-labelledby="bilingual-title">
+    <h2 id="bilingual-title">Sentence by sentence · 双语精读 <span class="count">{{ story.bilingual|length }}</span></h2>
+    <ol class="pair-list">
+      {% for pair in story.bilingual %}
+      <li class="pair"><p class="pair-en">{{ pair.en }}</p><p class="pair-zh zh-block">{{ pair.zh }}</p></li>
+      {% endfor %}
+    </ol>
+  </section>
+  {% endif %}
+
+  {% if story.grammar %}
+  <section class="section" id="grammar" aria-labelledby="grammar-title">
+    <h2 id="grammar-title">Tricky sentences · 长难句 <span class="count">{{ story.grammar|length }}</span></h2>
+    <ul class="point-list">
+      {% for item in story.grammar %}
+      <li class="point">
+        {% if item.sentence %}<p class="point-sentence">{{ item.sentence }}</p>{% endif %}
+        {% if item.point %}<p class="point-tag">{{ item.point }}</p>{% endif %}
+        {% if item.explanation_zh %}<p class="zh-block">{{ item.explanation_zh }}</p>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if story.listening_script %}
+  <section class="section" id="script" aria-labelledby="script-title">
+    <h2 id="script-title">Listening script · 听力稿</h2>
+    <details open class="script" data-script>
+      <summary>Show / hide the transcript 展开或收起听力原文</summary>
+      <p>{{ story.listening_script }}</p>
+    </details>
+    <p class="tip">跟读建议：先 1× 听懂大意，再 0.75× 逐句跟读，最后 1.25× 复述。 0.75× 慢速可点上方 Speed。</p>
+  </section>
+  {% endif %}
+
+  {% if story.speaking %}
+  <section class="section" id="speaking" aria-labelledby="speaking-title">
+    <h2 id="speaking-title">Speaking · 开口说</h2>
+    {% if story.speaking.questions %}
+    <ol class="question-list">
+      {% for question in story.speaking.questions %}<li>{{ question }}</li>{% endfor %}
+    </ol>
+    {% endif %}
+    {% set roleplay = story.speaking.get("roleplay") or {} %}
+    {% if roleplay %}
+    <div class="roleplay">
+      <h3>Role-play 角色扮演：{{ roleplay.title }}</h3>
+      {% if story.speaking.roleplay.scenario %}<p class="rp-line"><span class="rp-key">场景 Scenario</span>{{ roleplay.scenario }}</p>{% endif %}
+      {% if story.speaking.roleplay.roles %}<ul class="rp-roles">{% for role in story.speaking.roleplay.roles %}<li>{{ role }}</li>{% endfor %}</ul>{% endif %}
+      {% if story.speaking.roleplay.task %}<p class="rp-line"><span class="rp-key">任务 Task</span>{{ roleplay.task }}</p>{% endif %}
+    </div>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  {% if story.writing %}
+  <section class="section" id="writing" aria-labelledby="writing-title">
+    <h2 id="writing-title">Writing · 写作</h2>
+    {% if story.writing.topic %}<p class="writing-topic">{{ story.writing.topic }}</p>{% endif %}
+    {% if story.writing.essay %}
+    <details class="essay">
+      <summary>Model essay 范文{% if story.writing.words %} · {{ story.writing.words }} words{% endif %}</summary>
+      <p>{{ story.writing.essay }}</p>
+    </details>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  {% if story.quiz %}
+  <section class="section" id="quiz" aria-labelledby="quiz-title">
+    <h2 id="quiz-title">Quiz · 小练习 <span class="count">{{ story.quiz|length }}</span></h2>
+    <form class="quiz" data-quiz novalidate>
+      <ol class="quiz-list">
+        {% for item in story.quiz %}
+        {% set qid = loop.index0 %}
+        <li class="quiz-q" data-answer="{{ item.answer }}">
+          <p class="quiz-stem">{{ loop.index }}. {{ item.q }}</p>
+          {% if item.choices %}
+          <ul class="quiz-choices">
+            {% for choice in item.choices %}
+            <li><label class="quiz-choice"><input type="radio" name="quiz-{{ qid }}" value="{{ choice.letter }}"><b>{{ choice.letter }}</b><span>{{ choice.text }}</span></label></li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <p class="quiz-explain zh-block" hidden>{{ item.explain }}</p>
+        </li>
+        {% endfor %}
+      </ol>
+      <p class="quiz-actions">
+        <button type="button" class="btn btn-primary" data-quiz-check>Check answers 对答案</button>
+        <button type="button" class="btn" data-quiz-reset>Reset 重做</button>
+        <span class="quiz-score" data-quiz-score aria-live="polite"></span>
+      </p>
+    </form>
+  </section>
+  {% endif %}
+
+  {% if story.role_pages %}
+  <section class="section" id="role-views" aria-labelledby="role-views-title">
+    <h2 id="role-views-title">Read it your way · 角色版本</h2>
+    <p class="band-lede">Each role re-cuts this pack with its own level, word budget and focus. 每个角色按自己的难度与词数上限重排同一篇母版。</p>
+    <div class="role-tags">
+      {% for tag in story.role_pages %}
+      <a class="tag tag-big" href="{{ root }}{{ tag.href }}">{{ tag.name }} <span class="zh">→ {{ tag.key }}</span></a>
+      {% endfor %}
+    </div>
+    {% for key, body in story.role_bodies.items() %}
+    <details class="role-preview">
+      <summary><span>{{ story.role_names[key] or key }}</span> <em>{{ body.words }} words{% if body.platforms %} · {{ body.platforms|length }} platform drafts 平台文案{% endif %}</em></summary>
+      <div class="markdown">{{ body.html }}</div>
+      {% for copy in body.platforms %}
+      <details class="nested">
+        <summary>{{ copy.emoji }} {{ copy.name }} <span class="zh">{{ copy.key }} · {{ copy.language }}</span></summary>
+        <div class="markdown">{{ copy.html }}</div>
+      </details>
+      {% endfor %}
+    </details>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <footer class="story-foot">
+    <p class="pack-id">Pack <code>{{ story.id }}</code> · {{ story.sections|length }} modules · generated by <code>foundry.site</code></p>
+    <p class="pager">
+      {% if prev %}<a class="btn btn-small" href="{{ root }}{{ prev.href }}">← {{ prev.title|clip(40) }}</a>{% endif %}
+      {% if next %}<a class="btn btn-small" href="{{ root }}{{ next.href }}">{{ next.title|clip(40) }} →</a>{% endif %}
+    </p>
+  </footer>
+</article>
+
+{% if more %}
+<section class="band" aria-labelledby="more-title">
+  <h2 id="more-title">More stories 更多篇目</h2>
+  <ul class="mini-list">
+    {% for item in more %}
+    <li><a href="{{ root }}{{ item.href }}">{{ item.title }}</a><span class="zh">{{ item.date_label }} · {{ item.category_en }}{% if item.audio %} · 🎧{% endif %}</span></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}
