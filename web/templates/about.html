@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="about-head">
+  <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>About · 关于本站</p>
+  <h1>{{ site_name }} — {{ site_tagline }}</h1>
+  <p class="lede">{{ site_tagline_zh }}。One news story a day, rewritten for every CEFR level, packaged with bilingual notes, vocabulary, a listening track and a quiz.</p>
+  <ul class="about-stats">
+    <li><b>{{ stats.stories }}</b><span>stories 篇</span></li>
+    <li><b>{{ stats.levels|length }}</b><span>CEFR levels 档</span></li>
+    <li><b>{{ stats.roles }}</b><span>roles 角色</span></li>
+    <li><b>{{ stats.platforms }}</b><span>platforms 平台</span></li>
+    <li><b>{{ stats.audio }}</b><span>audio clips 音频</span></li>
+    <li><b>{{ stats.words }}</b><span>words 词</span></li>
+  </ul>
+</header>
+
+<section class="section" aria-labelledby="how-title">
+  <h2 id="how-title">How it is made · 生产流水线</h2>
+  <p class="band-lede">Everything on this site is generated offline from <code>output/</code>. 本站所有页面都由本地流水线产物离线渲染，没有服务器、没有数据库、没有第三方脚本。</p>
+  <ol class="stage-list">
+    {% for key, label, text in pipeline_stages %}
+    <li class="stage">
+      <p class="stage-key"><code>{{ key }}</code></p>
+      <p class="stage-label">{{ label }}</p>
+      <p class="stage-text">{{ text }}</p>
+    </li>
+    {% endfor %}
+  </ol>
+  <p class="tip">Rebuild it yourself 重新生成：<code>python -m foundry.site</code>（或 <code>build_site(load_settings())</code>）。模板在 <code>web/templates/</code>，样式与脚本在 <code>web/templates/static/</code>。</p>
+</section>
+
+<section class="section" aria-labelledby="reading-title">
+  <h2 id="reading-title">How to study with it · 怎么用</h2>
+  <ol class="question-list">
+    <li>Pick your role on the home page 首页先选角色：12 个角色对应不同难度与词数上限。</li>
+    <li>Read the story at your level 按 CEFR 档位读：A1 到 C2 同一事件，逐档加难。</li>
+    <li>Check the words 过词汇表，再逐句对照双语精读。</li>
+    <li>Listen and repeat 听力跟读：0.75× 慢速起步，最后 1.25× 复述。</li>
+    <li>Answer the quiz 做完练习再点对答案，解析是中文。</li>
+  </ol>
+</section>
+
+{% if roles_table %}
+<section class="section" aria-labelledby="roles-title">
+  <h2 id="roles-title">Learner roles · 12 个角色</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th scope="col">Role</th><th scope="col">角色</th><th scope="col">Levels</th><th scope="col">Word budget</th><th scope="col">Modules</th><th scope="col">Tone 语气</th></tr></thead>
+      <tbody>
+        {% for item in roles_table %}
+        <tr>
+          <th scope="row"><a class="plain-link" href="{{ root }}{{ item.href }}"><code>{{ item.key }}</code></a></th>
+          <td class="zh">{{ item.emoji }} {{ item.name }}</td>
+          <td>{{ item.levels|join('/') }}</td>
+          <td>{{ item.word_limit }}</td>
+          <td>{{ item.modules|length }}</td>
+          <td class="zh">{{ item.tone|clip(70) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
+{% if platform_table %}
+<section class="section" aria-labelledby="platforms-title">
+  <h2 id="platforms-title">Publishing formats · 6 个平台</h2>
+  <ul class="point-list">
+    {% for item in platform_table %}
+    <li class="point">
+      <p class="point-sentence">{{ item.emoji }} {{ item.name }} <span class="zh">{{ item.key }} · {{ item.language }}</span></p>
+      <p class="point-tag">{{ item.format|clip(110) }}</p>
+      <p class="zh-block">≤ {{ item.limit }}{% if item.unit == 'words' %} words{% else %} 字{% endif %} · {{ item.notes|clip(70) }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if sources %}
+<section class="section" aria-labelledby="sources-title">
+  <h2 id="sources-title">English sources · 英文信源</h2>
+  <ul class="mini-list">
+    {% for item in sources %}
+    <li><a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.name }}</a><span class="zh">{{ item.category }} · {{ item.type }}</span></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section class="section" aria-labelledby="audio-title">
+  <h2 id="audio-title">Audio · 音频</h2>
+  <p class="band-lede">Narration is produced with free Microsoft edge-tts voices ({{ stats.audio }} clips on this build) and copied into <code>web/audio/</code> so the folder can be deployed on its own.
+     配音用免费的 edge-tts 合成，并复制到 <code>web/audio/</code>，整站可离线播放与下载。源文件在 <code>{{ audio_dir }}</code>。</p>
+  {% if not stats.audio %}<p class="tip">还没有音频：跑 <code>python -m foundry.tts --file output/posts/business/xiaohongshu.md --manifest</code> 再重建站点。</p>{% endif %}
+</section>
+
+{% if last_run %}
+<section class="section" aria-labelledby="run-title">
+  <h2 id="run-title">Last pipeline run · 上次运行</h2>
+  <div class="table-wrap">
+    <table class="kv-table">
+      <tbody>
+        {% for key, value in last_run.items() %}
+        <tr><th scope="row"><code>{{ key }}</code></th><td>{{ value }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
+<section class="section" aria-labelledby="notes-title">
+  <h2 id="notes-title">Notes 说明</h2>
+  <ul class="question-list">
+    <li class="zh-block">英文内容为主体，中文只用于讲解、背景与导航说明。</li>
+    <li>Text is adapted from public feeds for language learning; original copyright stays with the publishers. 文本摘自公开英文源，仅用于语言学习，原文版权归来源所有。</li>
+    <li>Static by design 纯静态：本页面无后端、无 Cookie、无外部 CDN；搜索与筛选都在浏览器本地完成。</li>
+    <li>产物目录 <code>{{ packs_dir }}</code> / <code>{{ posts_dir }}</code> / <code>{{ audio_dir }}</code>；站点目录 <code>web/</code>。</li>
+  </ul>
+</section>
+{% endblock %}
