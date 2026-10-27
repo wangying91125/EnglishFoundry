@@ -33,6 +33,7 @@
 """
 from __future__ import annotations
 
+import argparse
 import copy
 import json
 import logging
@@ -112,20 +113,18 @@ def _as_int(value: Any, default: int = 0) -> int:
 
 
 def _split_keys(value: Any) -> list[str]:
-    """把 ``"a,b"`` / ``["a", "b"]`` / ``None`` 归一成去重保序的 key 列表（空 → 空列表）。"""
+    """把 ``"a,b"`` / ``["a", "b"]`` / ``None`` 拆成去重保序的原始 key 列表（空 → 空列表）。"""
     if value is None:
         return []
-    items: list[Any]
     if isinstance(value, str):
-        items = value.replace(";", ",").split(",")
+        items: list[Any] = value.replace(";", ",").split(",")
     elif isinstance(value, Iterable):
         items = list(value)
     else:
         items = [value]
     keys: list[str] = []
     for item in items:
-        key = _as_text(item).lower().replace("-", "_").replace(" ", "_")
-        key = key.strip("_")
+        key = _as_text(item)
         if key and key not in keys:
             keys.append(key)
     return keys
@@ -508,7 +507,7 @@ def run(
 
     # 摘要先落盘再建站点：About 页的 “Last pipeline run” 读的就是这个文件，
     # 顺序反过来时首次运行永远显示空摘要（site_files 不在展示的那 10 项里，不受影响）。
-    flush(summary, loaded, write_summary)
+    _flush(summary, loaded, write_summary)
 
     # ---- 7) site ----
     site_files: list[Path] = []
@@ -523,7 +522,7 @@ def run(
     summary["site_files"] = len(site_files)
     summary["duration_seconds"] = round(time.monotonic() - started, 2)
     summary["ok"] = bool(packs) and not failures
-    flush(summary, loaded, write_summary)
+    _flush(summary, loaded, write_summary)
     log.info(
         "流水线结束：%s 源 / %s 故事 / %s 角色 / %s 失败项（%s 秒）",
         sources,
@@ -534,7 +533,7 @@ def run(
     )
     return summary
 
-def flush(summary: dict[str, Any], settings: Settings, write_summary: bool = True) -> None:
+def _flush(summary: dict[str, Any], settings: Settings, write_summary: bool = True) -> None:
     """按需把运行摘要写进 ``output/last_run.json``（写盘失败也只记一笔，不抛出）。"""
     if not write_summary:
         return
@@ -604,8 +603,6 @@ def write_last_run(summary: Mapping[str, Any], settings: Settings | None = None)
 
 def _main(argv: Sequence[str] | None = None) -> int:  # pragma: no cover - 便捷入口，验收走 scripts/run_daily.py
     """``python -m foundry.pipeline --dry-run --limit 2``（和 scripts/run_daily.py 等价）。"""
-    import argparse
-
     parser = argparse.ArgumentParser(description="跑一遍 EnglishFoundry 端到端流水线")
     parser.add_argument("--limit", type=int, default=None, help="最多处理几个 Story")
     parser.add_argument("--roles", default=None, help="逗号分隔的角色 key（默认全部）")
