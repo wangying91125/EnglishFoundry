@@ -403,7 +403,7 @@ class AudioClip:
     def duration_label(self) -> str:
         if self.seconds <= 0:
             return ""
-        total = int(round(self.seconds))
+        total = int(self.seconds + 0.5)  # 四舍五入到整秒（.5 向上，别用银行家舍入）
         return f"{total // 60}:{total % 60:02d}"
 
     @property

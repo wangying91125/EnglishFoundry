@@ -92,6 +92,8 @@ def put_audio(project: Path, items: list[dict], extra: dict[str, bytes] | None =
     audio = project / "output" / "audio"
     audio.mkdir(parents=True, exist_ok=True)
     for row in items:
+        if row.get("ok") is False:
+            continue  # 失败的条目连文件都不该有（tts 是原子写盘）
         (audio / row["file"]).write_bytes(FAKE_MP3)
     (audio / MANIFEST_NAME).write_text(
         json.dumps({"generated_at": "2026-10-27T00:00:00+00:00", "total": len(items), "items": items}, ensure_ascii=False),
@@ -279,6 +281,7 @@ def test_discover_posts_uses_story_and_role_directories(settings):
 
 # ---------------------------------------------------------------- about
 def test_about_page_documents_pipeline_and_sources(settings):
+    build_site(settings, packs=[FIXTURE])
     about = read(web_root(settings.root) / "about.html")
     for stage in ("fetch", "normalize", "master", "roles", "platforms", "tts", "site"):
         assert f"<code>{stage}</code>" in about
