@@ -53,4 +53,4 @@ AI coding assistants are now part of the daily work of many software teams. They
 今日任务：朗读正文 2 遍，8 个单词各造一个句子，错题抄进积累本。
 
 ---
-*素材：母版 `fd677f5ea44ced7f`｜角色 `k12`｜2026-10-27T08:41:03.390577+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow ｜ 觉得有用，点个「在看」收藏这个系列。*
+*素材：母版 `fd677f5ea44ced7f`｜角色 `k12`｜2026-10-27T08:42:29.730955+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow ｜ 觉得有用，点个「在看」收藏这个系列。*

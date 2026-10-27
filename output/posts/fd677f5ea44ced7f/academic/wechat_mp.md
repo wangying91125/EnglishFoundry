@@ -45,4 +45,4 @@ The interesting consequence of ubiquitous code assistants is architectural rathe
 今日任务：把这则报道改写成 150 词结构化摘要，并列出 3 个可引文献方向。
 
 ---
-*素材：母版 `fd677f5ea44ced7f`｜角色 `academic`｜2026-10-27T08:41:03.390577+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow ｜ 觉得有用，点个「在看」收藏这个系列。*
+*素材：母版 `fd677f5ea44ced7f`｜角色 `academic`｜2026-10-27T08:42:29.730955+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow ｜ 觉得有用，点个「在看」收藏这个系列。*

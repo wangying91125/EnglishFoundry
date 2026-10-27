@@ -45,4 +45,4 @@ Artificial intelligence coding assistants have moved from a novelty to an ordina
 今日任务：听力稿先盲听做题，再对照文本精听一遍，记下 5 处连读。
 
 ---
-*素材：母版 `fd677f5ea44ced7f`｜角色 `cet`｜2026-10-27T08:41:03.390577+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow ｜ 觉得有用，点个「在看」收藏这个系列。*
+*素材：母版 `fd677f5ea44ced7f`｜角色 `cet`｜2026-10-27T08:42:29.730955+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow ｜ 觉得有用，点个「在看」收藏这个系列。*
