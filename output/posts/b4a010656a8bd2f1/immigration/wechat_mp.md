@@ -49,4 +49,4 @@ Regulators in the European Union have fined a large social network 430 million e
 今日任务：3 个口语问题各答 30 秒并录音，整理去柜台要问的 5 个英文句子。
 
 ---
-*素材：母版 `b4a010656a8bd2f1`｜角色 `immigration`｜2026-10-27T11:35:55.553740+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/eu-regulators-fine-social-network ｜ 觉得有用，点个「在看」收藏这个系列。*
+*素材：母版 `b4a010656a8bd2f1`｜角色 `immigration`｜2026-10-27T11:41:03.390577+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/eu-regulators-fine-social-network ｜ 觉得有用，点个「在看」收藏这个系列。*
