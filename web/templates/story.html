@@ -156,9 +156,9 @@
     {% if roleplay %}
     <div class="roleplay">
       <h3>Role-play 角色扮演：{{ roleplay.title }}</h3>
-      {% if story.speaking.roleplay.scenario %}<p class="rp-line"><span class="rp-key">场景 Scenario</span>{{ roleplay.scenario }}</p>{% endif %}
-      {% if story.speaking.roleplay.roles %}<ul class="rp-roles">{% for role in story.speaking.roleplay.roles %}<li>{{ role }}</li>{% endfor %}</ul>{% endif %}
-      {% if story.speaking.roleplay.task %}<p class="rp-line"><span class="rp-key">任务 Task</span>{{ roleplay.task }}</p>{% endif %}
+      {% if roleplay.scenario %}<p class="rp-line"><span class="rp-key">场景 Scenario</span>{{ roleplay.scenario }}</p>{% endif %}
+      {% if roleplay.roles %}<ul class="rp-roles">{% for part in roleplay.roles %}<li>{{ part }}</li>{% endfor %}</ul>{% endif %}
+      {% if roleplay.task %}<p class="rp-line"><span class="rp-key">任务 Task</span>{{ roleplay.task }}</p>{% endif %}
     </div>
     {% endif %}
   </section>

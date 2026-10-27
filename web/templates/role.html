@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block content %}
+<nav class="crumbs" aria-label="Breadcrumb 面包屑">
+  <a href="{{ root }}index.html">← Today 今日精选</a>
+  <span aria-hidden="true">/</span>
+  <a href="{{ root }}index.html#roles">Roles 角色定制</a>
+  <span aria-hidden="true">/</span>
+  <span class="crumb-current">{{ role.name or role_key }}</span>
+</nav>
+
+<header class="role-head">
+  <p class="role-emoji-big" aria-hidden="true">{{ role.emoji or '🎯' }}</p>
+  <div class="role-head-text">
+    <p class="eyebrow">Learner role · 角色 <code>{{ role_key }}</code></p>
+    <h1>{{ role.name or role_key }}</h1>
+    {% if role.tone %}<p class="lede">{{ role.tone }}</p>{% endif %}
+    <ul class="pill-row">
+      <li class="pill">Levels {{ role.levels|join(' / ') }}</li>
+      <li class="pill pill-ghost">≤ {{ role.word_limit }} words 词数上限</li>
+      {% if role.modules %}<li class="pill pill-ghost">{{ role.modules|length }} modules 板块</li>{% endif %}
+      <li class="pill">{{ stories|length }} stories 篇</li>
+    </ul>
+  </div>
+</header>
+
+<div class="role-facts">
+  {% if role.focus %}
+  <div class="fact"><h2>Focus 本篇重点</h2><p>{{ role.focus }}</p></div>
+  {% endif %}
+  {% if role.cta %}
+  <div class="fact"><h2>Daily task 收尾任务</h2><p>{{ role.cta }}</p></div>
+  {% endif %}
+  {% if role.keywords %}
+  <div class="fact">
+    <h2>Topics it looks for 题材关键词</h2>
+    <p class="keyword-row">{% for word in role.keywords %}<span class="keyword">{{ word }}</span>{% endfor %}</p>
+  </div>
+  {% endif %}
+  {% set hint = role.tts_hint() %}
+  {% if hint %}
+  <div class="fact">
+    <h2>Narration 配音提示</h2>
+    <p>{% for key, value in hint.items() %}<span class="keyword">{{ key }}: {{ value }}</span>{% endfor %}</p>
+  </div>
+  {% endif %}
+</div>
+
+{% if stories %}
+<section class="section" aria-labelledby="role-stories-title">
+  <h2 id="role-stories-title">Stories for this role · 本角色篇目 <span class="count">{{ stories|length }}</span></h2>
+  {% for story in stories %}
+  {% set body = story.role_bodies.get(role_key) %}
+  <article class="role-story" id="story-{{ story.id }}">
+    <header class="role-story-head">
+      <p class="card-meta">
+        {% if story.date_label %}<time datetime="{{ story.iso_date }}">{{ story.date_label }}</time> ·{% endif %}
+        {{ story.category_en }}{% if story.category_zh %} <span class="zh">{{ story.category_zh }}</span>{% endif %}
+        {% if scores.get(story.id) %} · <span class="fit">fit {{ scores[story.id] }}</span>{% endif %}
+      </p>
+      <h3><a href="{{ root }}{{ story.href }}">{{ story.title }}</a></h3>
+      {% if body %}
+      <p class="role-story-meta">
+        {{ body.words }} words
+        {% if body.origin and body.origin != 'rendered' %}<span class="zh">· 取自 {{ body.origin }}</span>{% else %}<span class="zh">· 现场按角色重排</span>{% endif %}
+        {% if story.audio %}<a class="plain-link" href="{{ root }}{{ story.href }}#listening">🎧 listening 听力</a>{% endif %}
+      </p>
+      {% endif %}
+    </header>
+
+    {% if body and body.html %}
+    <div class="markdown role-markdown">{{ body.html }}</div>
+    {% elif story.levels %}
+    {% set level = story.body() %}
+    <div class="markdown"><h3>{{ level.title }}</h3><p>{{ level.body }}</p></div>
+    {% endif %}
+
+    {% if body and body.platforms %}
+    <details class="nested drafts">
+      <summary>Publishing drafts 平台文案 <span class="zh">{{ body.platforms|length }} 个平台</span></summary>
+      {% for copy in body.platforms %}
+      <details class="nested">
+        <summary>{{ copy.emoji }} {{ copy.name }} <span class="zh">{{ copy.key }} · {{ copy.language }}{% if body.words %} · {{ copy.text|words }} words{% endif %}</span></summary>
+        <div class="markdown">{{ copy.html }}</div>
+      </details>
+      {% endfor %}
+    </details>
+    {% endif %}
+
+    <p class="role-story-foot">
+      <a class="btn btn-small" href="{{ root }}{{ story.href }}">Full lesson 完整课（词汇 / 语法 / 练习）</a>
+      {% if story.url %}<a class="btn btn-small" href="{{ story.url }}" target="_blank" rel="noopener noreferrer">Original 原文 ↗</a>{% endif %}
+    </p>
+  </article>
+  {% endfor %}
+</section>
+{% else %}
+<section class="section">
+  <h2>Stories for this role · 本角色篇目</h2>
+  <p class="band-lede">No story matched this role&rsquo;s topics yet — browse everything below. 还没有命中本角色题材的篇目，可先看下面的全部故事。</p>
+</section>
+{% endif %}
+
+{% if others %}
+<section class="band" aria-labelledby="others-title">
+  <h2 id="others-title">Also worth reading 其他篇目</h2>
+  <ul class="mini-list">
+    {% for item in others %}
+    <li><a href="{{ root }}{{ item.href }}">{{ item.title }}</a><span class="zh">{{ item.date_label }} · {{ item.category_en }}{% if item.audio %} · 🎧{% endif %}</span></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if platforms_table %}
+<section class="band" aria-labelledby="platforms-title">
+  <h2 id="platforms-title">Publishing formats 发布形态</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th scope="col">Platform</th><th scope="col">平台</th><th scope="col">Shape</th><th scope="col">Limit</th></tr></thead>
+      <tbody>
+        {% for item in platforms_table %}
+        <tr>
+          <th scope="row">{{ item.emoji }} {{ item.key }}</th>
+          <td class="zh">{{ item.name }}</td>
+          <td>{{ item.format|clip(120) }}</td>
+          <td>≤ {{ item.limit }}{% if item.unit == 'words' %} words{% else %} 字{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if categories %}
+  <p class="band-lede">Filter the home page by category to find more: 回首页可按类别筛选：
+    {% for item in categories %}{{ item.en }} {{ item.zh }}（{{ item.count }}）{% if not loop.last %}、{% endif %}{% endfor %}。
+  </p>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}
