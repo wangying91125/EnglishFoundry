@@ -466,18 +466,6 @@ def run(
         log.info("配音：没有要合成的文本")
     audio_ok = sum(1 for result in audio_results if result.ok)
 
-    # ---- 7) site ----
-    site_files: list[Path] = []
-    try:
-        site_files = list(build_site(loaded, limit=cap))
-    except Exception as error:  # noqa: BLE001
-        fail("site", "生成静态站点", error)
-    else:
-        done("site")
-        log.info("站点：%s 个文件（%s）", len(site_files), loaded.rel(loaded.output.web))
-
-    elapsed = round(time.monotonic() - started, 2)
-    ok = bool(packs) and not failures
     summary: dict[str, Any] = {
         # —— 以下 10 项会显示在站点 About 页（site._last_run 只取前 10 个标量/列表）——
         "run_at": iso_or_none(clock),
@@ -489,14 +477,14 @@ def run(
         "platforms": len(platforms_used),
         "posts": len(posts),
         "audio": audio_ok,
-        "failures": list(failures),
+        "failures": failures,
         # —— 以下是排障细节，不进 About 页 ——
         "dry_run": dry_run,
         "with_tts": with_tts,
         "limit": cap,
         "packs": len(packs),
-        "site_files": len(site_files),
-        "duration_seconds": elapsed,
+        "site_files": 0,
+        "duration_seconds": round(time.monotonic() - started, 2),
         "stages": stages,
         "outputs": {
             "packs": loaded.rel(loaded.output.packs),
@@ -505,17 +493,47 @@ def run(
             "web": loaded.rel(loaded.output.web),
             "summary": loaded.rel(loaded.output.last_run),
         },
-        "ok": ok,
+        "ok": bool(packs) and not failures,
     }
-    if write_summary:
-        try:
-            write_last_run(summary, loaded)
-        except OSError as error:  # pragma: no cover - 磁盘问题没什么可挽救的
-            summary["failures"].append(f"summary: 写 {loaded.output.last_run}：{error}")
-            summary["ok"] = False
-    log.info("流水线结束：%s 源 / %s 故事 / %s 角色 / %s 失败项（%s 秒）",
-             sources, len(stories), len(roles_used), len(failures), elapsed)
+
+    # 摘要先落盘再建站点：About 页的 “Last pipeline run” 读的就是这个文件，
+    # 顺序反过来时首次运行永远显示空摘要（site_files 不在展示的那 10 项里，不受影响）。
+    flush(summary, loaded, write_summary)
+
+    # ---- 7) site ----
+    site_files: list[Path] = []
+    try:
+        site_files = list(build_site(loaded, limit=cap))
+    except Exception as error:  # noqa: BLE001
+        fail("site", "生成静态站点", error)
+    else:
+        done("site")
+        log.info("站点：%s 个文件（%s）", len(site_files), loaded.rel(loaded.output.web))
+
+    summary["site_files"] = len(site_files)
+    summary["duration_seconds"] = round(time.monotonic() - started, 2)
+    summary["ok"] = bool(packs) and not failures
+    flush(summary, loaded, write_summary)
+    log.info(
+        "流水线结束：%s 源 / %s 故事 / %s 角色 / %s 失败项（%s 秒）",
+        sources,
+        len(stories),
+        len(roles_used),
+        len(failures),
+        summary["duration_seconds"],
+    )
     return summary
+
+def flush(summary: dict[str, Any], settings: Settings, write_summary: bool = True) -> None:
+    """按需把运行摘要写进 ``output/last_run.json``（写盘失败也只记一笔，不抛出）。"""
+    if not write_summary:
+        return
+    try:
+        write_last_run(summary, settings)
+    except OSError as error:  # pragma: no cover - 磁盘问题没什么可挽救的
+        summary["failures"].append(f"summary: 写 {settings.output.last_run}：{error}")
+        summary["ok"] = False
+        log.warning("失败：summary 写盘：%s", error)
 
 
 def _load_table(loader: Any, loaded: Settings, label: str) -> dict[str, Any]:
