@@ -450,3 +450,14 @@ def test_cli_main_reports_missing_templates(project, monkeypatch, capsys):
     monkeypatch.setattr(site, "PACKAGE_ROOT", project / "nowhere")
     assert site_main(["--packs", str(FIXTURE)]) == 1
     assert "模板" in capsys.readouterr().err
+
+
+def test_prune_removes_stale_audio_copies(settings):
+    put_audio(settings.root, [{"key": "demo-eu-data-fine", "file": "demo-eu-data-fine.mp3", "bytes": len(FAKE_MP3), "ok": True}])
+    build_site(settings, packs=[FIXTURE])
+    copied = web_root(settings.root) / "audio" / "demo-eu-data-fine.mp3"
+    assert copied.is_file()
+    for path in (settings.root / "output" / "audio").glob("*.mp3"):
+        path.unlink()  # 源音频被清掉（重跑流水线时很常见）
+    build_site(settings, packs=[FIXTURE])
+    assert not copied.exists(), "站点里的过期音频副本该被 prune 掉"

@@ -1198,18 +1198,20 @@ def _write_page(env: Environment, template: str, target: Path, context: Mapping[
     return target
 
 
-def _prune_stale(directory: Path, keep: Sequence[Path]) -> list[Path]:
-    """删掉上一版遗留、这一版不再产生的 HTML（只动 story/ 与 role/ 两个子目录）。"""
-    removed: list[Path] = []
+def _prune_stale(directory: Path, keep: Sequence[Path], suffixes: Sequence[str] = (".html",)) -> list[Path]:
+    """删掉上一版遗留、这一版不再产生的文件（只扫给定目录，``templates`` 一律不碰）。"""
     wanted = {str(path.resolve()) for path in keep}
-    for path in sorted(directory.rglob("*.html")):
-        if str(path) in wanted or "templates" in path.parts:
+    removed: list[Path] = []
+    if not directory.is_dir():
+        return removed
+    for path in sorted(directory.rglob("*")):
+        if not path.is_file() or path.suffix.lower() not in suffixes or str(path.resolve()) in wanted:
             continue
         try:
             path.unlink()
             removed.append(path)
         except OSError as error:  # 只影响清理，不影响本次生成
-            log.debug("删除旧页面失败 %s：%s", path, error)
+            log.debug("删除过期文件失败 %s：%s", path, error)
     return removed
 
 
@@ -1234,7 +1236,7 @@ def build_site(
         posts_dir / audio_dir: 覆盖角色与音频来源目录。
         include_audio: 关掉就不读也不复制音频（详情页只留文本）。
         limit: 最多渲染几篇故事（``None`` 全量），给 pipeline 冒烟用。
-        prune: 是否删掉 ``web/story`` 与 ``web/role`` 里上一版遗留的页面。
+        prune: 是否删掉 ``web/story`` / ``web/role`` / ``web/audio`` 里上一版遗留的产物。
     Returns:
         生成文件的绝对路径列表（HTML + CSS/JS + 音频副本），同时打一条 info 日志。
     Raises:
@@ -1392,12 +1394,17 @@ def build_site(
     written.extend(role_pages)
 
     written.extend(_copy_static(templates, target))
-    written.extend(_copy_audio(clips, target))
+    audio_copies = _copy_audio(clips, target)
+    written.extend(audio_copies)
 
     if prune:
-        removed = _prune_stale(target / "story", pages) + _prune_stale(target / "role", role_pages)
+        removed = (
+            _prune_stale(target / "story", pages)
+            + _prune_stale(target / "role", role_pages)
+            + _prune_stale(target / AUDIO_DIR_NAME, audio_copies, suffixes=(".mp3",))
+        )
         if removed:
-            log.info("清理过期页面：%s 个", len(removed))
+            log.info("清理过期产物：%s 个文件", len(removed))
     if not stories:
         log.warning("没有可用母版：%s —— index.html 仍是空的站点骨架", loaded.rel(loaded.output.packs))
 
