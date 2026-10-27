@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About · EnglishFoundry</title>
+<meta name="description" content="How this static daily-English site is generated from the foundry pipeline.">
+<meta name="generator" content="foundry.site">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Ctext%20y='25'%20x='3'%20font-size='24'%3E%F0%9F%93%96%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="static/style.css">
+<script>document.documentElement.classList.replace('no-js', 'js');</script>
+</head>
+<body class="page-about">
+<a class="skip-link" href="#main">Skip to content 跳到正文</a>
+<header class="masthead">
+  <a class="brand" href="index.html">
+    <span class="brand-badge" aria-hidden="true">EF</span>
+    <span class="brand-text">
+      <strong>EnglishFoundry</strong>
+      <small>Daily English, levelled for you · 每日全球英文 · 分级精读 · 听力跟读</small>
+    </span>
+  </a>
+  <nav class="primary-nav" aria-label="Primary navigation 主导航">
+    <ul>
+      <li><a href="index.html"><span class="en">Today</span><span class="zh">今日精选</span></a></li>
+      <li><a href="index.html#library"><span class="en">Stories</span><span class="zh">分级阅读</span></a></li>
+      <li><a href="index.html#listening"><span class="en">Listening</span><span class="zh">听力下载</span></a></li>
+      <li><a href="index.html#roles"><span class="en">Roles</span><span class="zh">角色定制</span></a></li>
+      <li><a href="about.html" class="is-current" aria-current="page"><span class="en">About</span><span class="zh">关于本站</span></a></li>
+    </ul>
+  </nav>
+</header>
+<main id="main">
+<header class="about-head">
+  <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>About · 关于本站</p>
+  <h1>EnglishFoundry — Daily English, levelled for you</h1>
+  <p class="lede">每日全球英文 · 分级精读 · 听力跟读。One news story a day, rewritten for every CEFR level, packaged with bilingual notes, vocabulary, a listening track and a quiz.</p>
+  <ul class="about-stats">
+    <li><b>1</b><span>stories 篇</span></li>
+    <li><b>6</b><span>CEFR levels 档</span></li>
+    <li><b>12</b><span>roles 角色</span></li>
+    <li><b>6</b><span>platforms 平台</span></li>
+    <li><b>0</b><span>audio clips 音频</span></li>
+    <li><b>605</b><span>words 词</span></li>
+  </ul>
+</header>
+
+<section class="section" aria-labelledby="how-title">
+  <h2 id="how-title">How it is made · 生产流水线</h2>
+  <p class="band-lede">Everything on this site is generated offline from <code>output/</code>. 本站所有页面都由本地流水线产物离线渲染，没有服务器、没有数据库、没有第三方脚本。</p>
+  <ol class="stage-list">
+    <li class="stage">
+      <p class="stage-key"><code>fetch</code></p>
+      <p class="stage-label">Fetch · 抓取</p>
+      <p class="stage-text">Pull RSS/Atom feeds from global English sources into ``output/raw/articles.json``.</p>
+    </li>
+    <li class="stage">
+      <p class="stage-key"><code>normalize</code></p>
+      <p class="stage-label">Normalize · 清洗聚合</p>
+      <p class="stage-text">Filter by age and English ratio, then cluster same-event articles into stories.</p>
+    </li>
+    <li class="stage">
+      <p class="stage-key"><code>master</code></p>
+      <p class="stage-label">Master · 母版</p>
+      <p class="stage-text">One LLM pass per story writes the nine-module pack into ``output/packs``.</p>
+    </li>
+    <li class="stage">
+      <p class="stage-key"><code>roles</code></p>
+      <p class="stage-label">Roles · 角色</p>
+      <p class="stage-text">Rewrite the pack for 12 learner personas, each with its own word budget.</p>
+    </li>
+    <li class="stage">
+      <p class="stage-key"><code>platforms</code></p>
+      <p class="stage-label">Platforms · 平台</p>
+      <p class="stage-text">Fit the persona markdown into six publishing formats.</p>
+    </li>
+    <li class="stage">
+      <p class="stage-key"><code>tts</code></p>
+      <p class="stage-label">TTS · 配音</p>
+      <p class="stage-text">Synthesize free MP3 narration with edge-tts into ``output/audio``.</p>
+    </li>
+    <li class="stage">
+      <p class="stage-key"><code>site</code></p>
+      <p class="stage-label">Site · 站点</p>
+      <p class="stage-text">Render this static site into ``web/`` — no backend, no CDN.</p>
+    </li>
+  </ol>
+  <p class="tip">Rebuild it yourself 重新生成：<code>python -m foundry.site</code>（或 <code>build_site(load_settings())</code>）。模板在 <code>web/templates/</code>，样式与脚本在 <code>web/templates/static/</code>。</p>
+</section>
+
+<section class="section" aria-labelledby="reading-title">
+  <h2 id="reading-title">How to study with it · 怎么用</h2>
+  <ol class="question-list">
+    <li>Pick your role on the home page 首页先选角色：12 个角色对应不同难度与词数上限。</li>
+    <li>Read the story at your level 按 CEFR 档位读：A1 到 C2 同一事件，逐档加难。</li>
+    <li>Check the words 过词汇表，再逐句对照双语精读。</li>
+    <li>Listen and repeat 听力跟读：0.75× 慢速起步，最后 1.25× 复述。</li>
+    <li>Answer the quiz 做完练习再点对答案，解析是中文。</li>
+  </ol>
+</section>
+
+<section class="section" aria-labelledby="roles-title">
+  <h2 id="roles-title">Learner roles · 12 个角色</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th scope="col">Role</th><th scope="col">角色</th><th scope="col">Levels</th><th scope="col">Word budget</th><th scope="col">Modules</th><th scope="col">Tone 语气</th></tr></thead>
+      <tbody>
+        <tr>
+          <th scope="row"><a class="plain-link" href="role/k12.html"><code>k12</code></a></th>
+          <td class="zh">🎒 中小学 K12</td>
+          <td>A2/B1</td>
+          <td>1250</td>
+          <td>6</td>
+          <td class="zh">像课堂讲评：短句、常用词、多鼓励；术语先给中文再给英文，不出现超纲词</td>
+        </tr>
+        <tr>
+          <th scope="row"><a class="plain-link" href="role/postgrad.html"><code>postgrad</code></a></th>
+          <td class="zh">📚 考研英语</td>
+          <td>B2/C1</td>
+          <td>1900</td>
+          <td>7</td>
+          <td class="zh">真题教研口吻：逐句精读、点明熟词僻义与同义替换，每题答案都给出处句</td>
+        </tr>
+        <tr>
+          <th scope="row"><a class="plain-link" href="role/cet.html"><code>cet</code></a></th>
+          <td class="zh">🎧 四六级</td>
+          <td>B1/B2</td>
+          <td>1230</td>
+          <td>6</td>
+          <td class="zh">备考教练：先给可背的词块，再讲听力信号词，强调 60 秒内的信息密度</td>
+        </tr>
+        <tr>
+          <th scope="row"><a class="plain-link" href="role/ielts_toefl.html"><code>ielts_toefl</code></a></th>
+          <td class="zh">🪁 雅思托福</td>
+          <td>B2/C1</td>
+          <td>1320</td>
+          <td>6</td>
+          <td class="zh">学术应试：按评分维度讲（任务回应/连贯/词汇/语法），示范可直接搬走的句式</td>
+        </tr>
+        <tr>
+          <th scope="row"><a class="plain-link" href="role/business.html"><code>business</code></a></th>
+          <td class="zh">💼 商务职场</td>
+          <td>B1/B2</td>
+          <td>1250</td>
+          <td>6</td>
+          <td class="zh">职场备忘式：先结论后背景，句子短，可直接抄进邮件和会议发言</td>
+        </tr>
+        <tr>
+          <th scope="row"><a class="plain-link" href="role/trade.html"><code>trade</code></a></th>
+          <td class="zh">🚢 外贸业务员</td>
+          <td>B1/B2</td>
+          <td>1280</td>
+          <td>5</td>
+          <td class="zh">业务实战：紧扣询盘—报价—交期—索赔链条，句式要能直接发给客户</td>
+        </tr>
+        <tr>
+          <th scope="row"><a class="plain-link" href="role/crossborder.html"><code>crossborder</code></a></th>
+          <td class="zh">🛒 跨境电商</td>
+          <td>A2/B1</td>
+          <td>980</td>
+          <td>5</td>
+          <td class="zh">卖家视角：只用最常用词，短句 + 项目符号，话术可直接贴进 listing 和客服模板</td>
+        </tr>
+        <tr>
+          <th scope="row"><a class="plain-link" href="role/developer.html"><code>developer</code></a></th>
+          <td class="zh">💻 程序员/技术</td>
+          <td>B2/C1</td>
+          <td>1350</td>
+          <td>6</td>
+          <td class="zh">工程师读文档的方式：直给、结构化、术语准确，不寒暄，讲清机制与影响面</td>
+        </tr>
+        <tr>
+          <th scope="row"><a class="plain-link" href="role/academic.html"><code>academic</code></a></th>
+          <td class="zh">🎓 学术科研</td>
+          <td>C1/C2</td>
+          <td>1450</td>
+          <td>6</td>
+          <td class="zh">学术语域：名词化表达、hedge（may / approximately）与引用规范，不用口语缩写</td>
+        </tr>
+        <tr>
+          <th scope="row"><a class="plain-link" href="role/creator.html"><code>creator</code></a></th>
+          <td class="zh">🎬 内容创作者/出海</td>
+          <td>B1/B2</td>
+          <td>1080</td>
+          <td>6</td>
+          <td class="zh">口播脚本感：前 8 秒给钩子，句子短、口语化，多用问句和具体数字</td>
+        </tr>
+        <tr>
+          <th scope="row"><a class="plain-link" href="role/immigration.html"><code>immigration</code></a></th>
+          <td class="zh">🛂 移民留学/海外生活</td>
+          <td>A2/B1</td>
+          <td>1150</td>
+          <td>5</td>
+          <td class="zh">生活场景陪练：每句话都能在柜台、诊所、房东面前直接说出口，附中文对照</td>
+        </tr>
+        <tr>
+          <th scope="row"><a class="plain-link" href="role/kids.html"><code>kids</code></a></th>
+          <td class="zh">🧒 少儿亲子</td>
+          <td>A1/A2</td>
+          <td>880</td>
+          <td>5</td>
+          <td class="zh">讲故事：把新闻讲成小故事，多用比喻和拟声，一句不超过 8 个词，结尾一定要鼓励</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="platforms-title">
+  <h2 id="platforms-title">Publishing formats · 6 个平台</h2>
+  <ul class="point-list">
+    <li class="point">
+      <p class="point-sentence">🍠 小红书 <span class="zh">xiaohongshu · zh</span></p>
+      <p class="point-tag">钩子标题 + 英文头条原文 + 一句话事件 + 分点词卡（词+中文+短例句）+ 互动提问 + 话题标签</p>
+      <p class="zh-block">≤ 600 字 · 干货/合集口吻，中文框架短句多 emoji；英文学习内容必须原样引用；话题标签 3-6 个</p>
+    </li>
+    <li class="point">
+      <p class="point-sentence">📰 微信公众号 <span class="zh">wechat_mp · zh</span></p>
+      <p class="point-tag">深度长文：导语 → 事件原文（英文）→ 中文背景 → 核心词汇精讲 → 长难句拆解 → 听力口语 → 写作练习 → 收尾任务</p>
+      <p class="zh-block">≤ 3000 字 · 小标题分层（# / ##），每节先给英文原文再给中文讲评；结尾附阅读原文链接与「在看/收藏」引导</p>
+    </li>
+    <li class="point">
+      <p class="point-sentence">🎬 短视频口播 <span class="zh">shortvideo · zh</span></p>
+      <p class="point-tag">30-60 秒口语逐字稿：【钩子】→【英文原句跟读】→【中文串讲】→【3 个核心词】→【结尾引导关注】</p>
+      <p class="zh-block">≤ 320 字 · 按 ~5.5 字/秒的口播节奏，60 秒 ≤320 字；全部短句，不出现表格/Markdown 语法；English 句要读得出口</p>
+    </li>
+    <li class="point">
+      <p class="point-sentence">🔥 微博 <span class="zh">weibo · zh</span></p>
+      <p class="point-tag">140 字内微博：#话题# + 一句话 + 英文关键词（中文）若干 + 短链</p>
+      <p class="zh-block">≤ 140 字 · 含标点、标签与链接总字数 ≤140；#话题# 放最前不许被截断；放不下先砍词表再砍正文，最后截链接</p>
+    </li>
+    <li class="point">
+      <p class="point-sentence">🌐 X / Twitter <span class="zh">x · en</span></p>
+      <p class="point-tag">单条推文：英文一行新闻 + 一句关键事实 + Today&#39;s words 词单 + 1-2 个 hashtag</p>
+      <p class="zh-block">≤ 280 字 · 全英文单帖；≤280 字符（len 保守计数，emoji 按 2 码点算，不会超）；hashtag 1-2 个，不堆标签、不出现中文</p>
+    </li>
+    <li class="point">
+      <p class="point-sentence">💼 LinkedIn <span class="zh">linkedin · en</span></p>
+      <p class="point-tag">专业长帖：hook → What happened → Why it matters → Vocabulary spotlight（释义+例句）→ Structure to copy → Discussion → CT…</p>
+      <p class="zh-block">≤ 600 words · 全英文专业语气，少用 emoji；正文 300-600 词（按词计），超上限先砍例句再砍词数；结尾必须有 follow/订阅 CTA</p>
+    </li>
+  </ul>
+</section>
+
+<section class="section" aria-labelledby="sources-title">
+  <h2 id="sources-title">English sources · 英文信源</h2>
+  <ul class="mini-list">
+    <li><a href="https://feeds.bbci.co.uk/news/world/rss.xml" target="_blank" rel="noopener noreferrer">BBC World</a><span class="zh">news · rss</span></li>
+    <li><a href="https://feeds.npr.org/1001/rss.xml" target="_blank" rel="noopener noreferrer">NPR News</a><span class="zh">news · rss</span></li>
+    <li><a href="https://www.theguardian.com/world/rss" target="_blank" rel="noopener noreferrer">The Guardian</a><span class="zh">news · rss</span></li>
+    <li><a href="https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml" target="_blank" rel="noopener noreferrer">The New York Times</a><span class="zh">news · rss</span></li>
+    <li><a href="https://www.aljazeera.com/com/x/rss/all.xml" target="_blank" rel="noopener noreferrer">Al Jazeera</a><span class="zh">news · rss</span></li>
+    <li><a href="https://rss.dw.com/rdf/rss-en-all" target="_blank" rel="noopener noreferrer">Deutsche Welle</a><span class="zh">news · rss</span></li>
+    <li><a href="https://www.reddit.com/r/worldnews/.rss" target="_blank" rel="noopener noreferrer">Reddit r/worldnews</a><span class="zh">community · rss</span></li>
+    <li><a href="https://hnrss.org/frontpage" target="_blank" rel="noopener noreferrer">Hacker News</a><span class="zh">community · rss</span></li>
+    <li><a href="https://techcrunch.com/feed/" target="_blank" rel="noopener noreferrer">TechCrunch</a><span class="zh">tech · rss</span></li>
+    <li><a href="https://www.theverge.com/rss/index.xml" target="_blank" rel="noopener noreferrer">The Verge</a><span class="zh">tech · rss</span></li>
+    <li><a href="https://www.wired.com/feed/rss" target="_blank" rel="noopener noreferrer">Wired</a><span class="zh">tech · rss</span></li>
+    <li><a href="https://feeds.arstechnica.com/arstechnica/index" target="_blank" rel="noopener noreferrer">Ars Technica</a><span class="zh">tech · rss</span></li>
+    <li><a href="https://www.technologyreview.com/feed/" target="_blank" rel="noopener noreferrer">MIT Technology Review</a><span class="zh">tech · rss</span></li>
+    <li><a href="https://www.nasa.gov/feed/" target="_blank" rel="noopener noreferrer">NASA</a><span class="zh">science · rss</span></li>
+    <li><a href="https://www.nature.com/nature.rss" target="_blank" rel="noopener noreferrer">Nature</a><span class="zh">academic · rss</span></li>
+    <li><a href="https://export.arxiv.org/rss/cs" target="_blank" rel="noopener noreferrer">arXiv Computer Science</a><span class="zh">academic · rss</span></li>
+    <li><a href="https://feeds.feedburner.com/TEDTalks_audio" target="_blank" rel="noopener noreferrer">TED Talks</a><span class="zh">video · rss</span></li>
+  </ul>
+</section>
+
+<section class="section" aria-labelledby="audio-title">
+  <h2 id="audio-title">Audio · 音频</h2>
+  <p class="band-lede">Narration is produced with free Microsoft edge-tts voices (0 clips on this build) and copied into <code>web/audio/</code> so the folder can be deployed on its own.
+     配音用免费的 edge-tts 合成，并复制到 <code>web/audio/</code>，整站可离线播放与下载。源文件在 <code>output/audio</code>。</p>
+<p class="tip">还没有音频：跑 <code>python -m foundry.tts --file output/posts/business/xiaohongshu.md --manifest</code> 再重建站点。</p></section>
+
+
+<section class="section" aria-labelledby="notes-title">
+  <h2 id="notes-title">Notes 说明</h2>
+  <ul class="question-list">
+    <li class="zh-block">英文内容为主体，中文只用于讲解、背景与导航说明。</li>
+    <li>Text is adapted from public feeds for language learning; original copyright stays with the publishers. 文本摘自公开英文源，仅用于语言学习，原文版权归来源所有。</li>
+    <li>Static by design 纯静态：本页面无后端、无 Cookie、无外部 CDN；搜索与筛选都在浏览器本地完成。</li>
+    <li>产物目录 <code>output/packs</code> / <code>output/posts</code> / <code>output/audio</code>；站点目录 <code>web/</code>。</li>
+  </ul>
+</section>
+</main>
+<footer class="site-footer">
+  <p class="footer-brand"><strong>EnglishFoundry</strong> · Daily English, levelled for you — 静态站点，无后端、无 CDN，双击 <code>index.html</code> 即可离线阅读。</p>
+  <p class="footer-stats">Built 2026-10-27 15:56 UTC · 1 stories 篇 · 12 roles 角色 · 6 platforms 平台 · 0 audio clips 音频</p>
+  <p class="footer-note">Text is adapted from public English sources for language study; original copyright stays with the publishers. 原文版权归来源所有。<a href="about.html">About 关于本站</a></p>
+</footer>
+<script src="static/app.js" defer></script>
+</body>
+</html>
