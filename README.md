@@ -121,6 +121,23 @@ python -m foundry.tts --file output/posts/business/xiaohongshu.md --voice uk_fem
 - 角色/平台产物是 Markdown，默认先 `speech_text()` 清成口播稿（去标题符、强调符、表格线、链接 URL、`<details>`、emoji 与 `·｜` 分隔符，`C#` / `snake_case` 不误伤）；要逐字播报用 `--keep-markup` / `strip_markup=False`。
 - 验收：联网环境跑 `FOUNDRY_TTS_LIVE=1 pytest tests/test_tts.py -k live`（真出一段 mp3 并校验字节）；其余用例全程离线，用 `monkeypatch` 把 `edge_tts.Communicate` 换成假的流式实现。
 
+## 静态站点
+
+```bash
+python -m foundry.site                                            # 读 output/ 产物渲染到 web/，并打印文件清单
+python -m foundry.site --packs tests/fixtures/sample_pack.json    # 用 fixture 母版出一个 demo 站
+python -m foundry.site --limit 2 --no-audio                       # 冒烟：只渲染两篇、不复制音频
+```
+
+- `build_site(settings)` 是纯离线渲染器：读 `output/packs/*.json`（母版）、`output/posts/**/*.md`（角色 Markdown 与平台文案）、`output/audio/manifest.json` + `*.mp3`（配音）、`output/last_run.json`（运行摘要）与 `config/roles.yaml` / `config/platforms.yaml`，不联网、不调 LLM、不产新内容，返回生成（含复制）文件的清单 `List[Path]`。
+- 页面：`web/index.html`（今日精选 + 按角色/类别筛选 + 客户端搜索）、`web/story/<story_id>.html`（A1–C2 档位切换、双语精读、词汇表、长难句、背景、听力稿、口语、写作、练习判分）、`web/role/<role_key>.html`（12 个角色各一页）、`web/about.html`（流水线、角色/平台表、信源、上次运行摘要）；模板在 `web/templates/`，样式与脚本在 `web/templates/static/`（构建时复制成 `web/static/`）。
+- **纯静态**：无后端、无构建工具、无 CDN、无外部字体；搜索与筛选是原生 JS 在浏览器里对卡片 `data-roles` / `data-category` / `data-search` 做的过滤，不 `fetch` 任何 JSON，所以双击 `file://` 打开 `web/index.html` 也能用。
+- 设计：浅色主题 + 系统字体栈，移动端响应式（`auto-fit` 网格、粘性导航、可横向滚动的档位条）；英文内容为主，导航与小节标题带中文说明；每个板块缺内容就整段不渲染，不会出现空壳。
+- 音频：详情页与首页都列出 `<audio controls>` 播放器与 `download` 下载入口，mp3 复制进 `web/audio/`，`web/` 整目录即可直接部署；倍速按钮（0.75×–1.5×）走 `playbackRate` 并记住偏好。
+- 母版 JSON 只有 9 个内容键，标题/来源/类别/时间不保证有：能读就读（顶层键或 `meta` / `story` 段），读不到就用 B1 标题、`news` 类别与文件时间兜底；`output/posts` 里现成的角色 Markdown 优先认领（`posts/<role>.md`、`posts/<story_id>/<role>.md`、`posts/<role>/<platform>.md`），没有才现场调 `render_for_role()` 渲染。
+- 角色标签来自 `topic_match()` 的题材契合度（命中关键词才标，全都没命中时按难度偏好回退），首页角色筛选与角色页内容用的是同一份归属关系；坏 JSON、缺配置、缺音频都只降级并告警，单篇失败不拖垮整站。
+- 重建默认清理 `web/story` / `web/role` / `web/audio` 里上一版遗留的产物（`--no-prune` 保留），模板目录永不动。
+
 ## 目录结构
 
 - `src/foundry/config.py`：`load_settings()` 返回带属性的配置对象（`llm` / `tts` / `fetch` / `normalize` / `output` / `enabled_sources()`）。
@@ -130,10 +147,11 @@ python -m foundry.tts --file output/posts/business/xiaohongshu.md --voice uk_fem
 - `src/foundry/roles.py`：`load_roles()` / `render_for_role(pack, role_key)` / `render_all()` / `topic_match()`，12 个角色的差异化 Markdown。
 - `src/foundry/platforms.py`：`load_platforms()` / `render_for_platform(role_markdown, meta, platform_key)` / `render_all_platforms()`，6 平台适配文案（不联网、不调 LLM 的纯函数）。
 - `src/foundry/tts.py`：`synth_one(text, out_path, voice, rate)`（异步）/ `batch_synth(items, out_dir)`（同步包装）/ `speech_text()` / `write_manifest()`，edge-tts 免费配音。
-- 后续模块：`site` / `pipeline`。
-- `output/`：产物目录（`packs/` `posts/` `audio/` `raw/` `last_run.json`，`raw/` 下放抓取的 `articles.json` 与聚合的 `stories.json`）；`web/`：静态站点。
+- `src/foundry/site.py`：`build_site(settings)` / `collect_stories`（公开为 `story_from_pack` + `load_packs`）/ `load_audio_clips()` / `discover_posts()` / `markdown_to_html()`，把 `output/` 产物渲染成 `web/` 静态站点并返回文件清单。
+- 后续模块：`pipeline`。
+- `output/`：产物目录（`packs/` `posts/` `audio/` `raw/` `last_run.json`，`raw/` 下放抓取的 `articles.json` 与聚合的 `stories.json`）；`web/`：静态站点（生成物 `index.html` `about.html` `story/` `role/` `static/` `audio/` + 模板 `web/templates/`）。
 - `prompts/master.md`：母版生成的 LLM 提示词；`prompts/build/`：分模块任务指令。
-- `tests/`：pytest 用例（全部离线可跑，`tests/test_tts.py` 里 monkeypatch 掉 `edge_tts.Communicate`，`tests/fixtures/sample_pack.json` 是母版样例；`tests/test_platforms.py` 用同一份角色 Markdown 验收 6 个平台的长度与格式）。
+- `tests/`：pytest 用例（全部离线可跑，`tests/test_tts.py` 里 monkeypatch 掉 `edge_tts.Communicate`，`tests/fixtures/sample_pack.json` 是母版样例；`tests/test_platforms.py` 用同一份角色 Markdown 验收 6 个平台的长度与格式；`tests/test_site.py` 在临时项目根里跑 `build_site`，验收首页筛选/搜索索引、详情页九板块、音频下载、角色页认领与 Markdown 转义）。
 
 ## 云端保存与断点恢复
 
