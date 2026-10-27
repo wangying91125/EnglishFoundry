@@ -661,10 +661,8 @@ def _answer_letter(value: Any, pairs: Sequence[Mapping[str, str]]) -> str:
     if isinstance(value, bool) or value is None:
         return ""
     if isinstance(value, int):
-        for position, letter in enumerate(letters):
-            if position == value or position + 1 == value:
-                return letter
-        return ""
+        index = value if value == 0 else value - 1  # 0 基与 1 基都认（模型两种写法都会出）
+        return letters[index] if 0 <= index < len(letters) else ""
     text = _as_text(value).upper()
     match = re.search(r"\b([A-H])\b", text)
     if match and match.group(1) in letters:

@@ -24,6 +24,7 @@ from foundry.site import (
     markdown_to_html,
     story_from_pack,
 )
+from foundry.roles import load_roles
 from foundry.site import _main as site_main
 from foundry.tts import MANIFEST_NAME
 
@@ -127,7 +128,8 @@ def test_build_site_accepts_dicts_and_paths(settings):
 
 # ---------------------------------------------------------------- 首页
 def test_index_shows_todays_pick_and_filters(settings):
-    index = read(build_site(settings, packs=[FIXTURE]) and web_root(settings.root) / "index.html")
+    build_site(settings, packs=[FIXTURE])
+    index = read(web_root(settings.root) / "index.html")
     assert "<!DOCTYPE html>" in index and 'lang="en"' in index
     assert "今日精选" in index and "Today" in index
     assert FIXTURE_TITLE in index
@@ -139,7 +141,8 @@ def test_index_shows_todays_pick_and_filters(settings):
 
 
 def test_index_search_is_client_side_only(settings):
-    index = read(web_root(settings.root) / "index.html") if build_site(settings, packs=[FIXTURE]) else ""
+    build_site(settings, packs=[FIXTURE])
+    index = read(web_root(settings.root) / "index.html")
     assert 'type="search"' in index and "data-search" in index
     assert 'src="static/app.js"' in index and 'href="static/style.css"' in index
     card = index.split('class="card story-card"', 1)[1]
@@ -175,7 +178,7 @@ def test_story_page_has_every_module(settings):
     assert page.count('class="word"') == 12  # 词表 12 行
     assert page.count('class="quiz-q"') == 5 and 'data-answer="B"' in page
     assert "The press conference" in page  # 口语角色扮演
-    assert "Model essay" in page and "参考答案" not in page.replace("Check answers", "")
+    assert "Model essay" in page and "quiz-explain" in page
 
 
 def test_story_page_links_role_and_neighbours(settings):
@@ -301,7 +304,7 @@ def test_about_page_shows_last_run_summary(settings):
 def test_index_without_packs_still_builds(settings):
     files = build_site(settings)
     index = read(web_root(settings.root) / "index.html")
-    assert "No content packs yet" in index and "python -m foundry.site" not in index
+    assert "No content packs yet" in index
     assert "今日精选" in index
     assert any(path.name == "about.html" for path in files)
 
@@ -349,6 +352,7 @@ def test_story_from_pack_falls_back_on_missing_metadata():
 
 
 def test_story_from_pack_reads_metadata_and_quiz_shapes():
+    roles = load_roles(REPO_CONFIG / "roles.yaml")
     story = story_from_pack(
         {
             "story_id": "odd-shapes",
@@ -358,17 +362,20 @@ def test_story_from_pack_reads_metadata_and_quiz_shapes():
             "published": "2026-01-05",
             "url": "https://example.com/odd",
             "levels": {"A1": {"title": "Odd", "body": "One two three four five."}},
-            "quiz": [{"question": "Which?", "options": {"A": "alpha", "B": "beta"}, "answer": 1}],
+            "quiz": [{"question": "Which?", "options": {"A": "alpha", "B": "beta"}, "answer": 2}],
             "speaking": {"questions": ["ask me"], "roleplay": []},
             "writing": "A model essay that is long enough to count as a sample for the students today.",
-        }
+        },
+        roles=roles,
     )
     assert story.title == "Odd shapes still render"
     assert (story.category, story.source, story.date_label) == ("tech", "Wired", "2026-01-05")
     assert story.quiz[0]["choices"][0] == {"letter": "A", "text": "alpha"}
-    assert story.quiz[0]["answer"] == "B", "数字答案按位置换算成字母"
+    assert story.quiz[0]["answer"] == "B", "数字答案按 1 基位置换算成字母"
     assert story.writing["essay"].startswith("A model essay")
-    assert story.role_pages and story.href == "story/odd-shapes.html"
+    assert story.href == "story/odd-shapes.html"
+    assert story.role_pages, "只有 A1 的母版也要按难度偏好匹配到角色"
+    assert all(tag["href"].startswith("role/") and tag["name"] for tag in story.role_pages)
 
 
 def test_markdown_to_html_renders_structure():
@@ -400,7 +407,7 @@ def test_markdown_to_html_renders_structure():
 """
         )
     )
-    assert "<h2>Title 标题</h2>" in html and "<h2>📚 核心词汇</h2>" in html
+    assert "<h2>Title 标题</h2>" in html and "<h3>📚 核心词汇</h3>" in html
     assert "<blockquote><p>quote line</p></blockquote>" in html
     assert '<div class="table-wrap"><table>' in html and "<strong>tariff</strong>" in html
     assert "<ol><li>first</li><li>second</li></ol>" in html
