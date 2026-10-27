@@ -430,3 +430,20 @@ def test_markdown_to_html_escapes_untrusted_input():
     assert 'href="#"' in html and "javascript:" not in html
     assert "<div" not in html
     assert "<code>&lt;b&gt;code&lt;/b&gt;</code>" in html and "A &lt; B" in html
+
+
+# ---------------------------------------------------------------- 命令行
+def test_cli_main_prints_file_list(project, monkeypatch, capsys):
+    monkeypatch.setenv(ENV_ROOT, str(project))
+    assert site_main(["--packs", str(FIXTURE), "--limit", "1"]) == 0
+    out = capsys.readouterr().out
+    assert "共生成" in out
+    assert "web/index.html" in out and "web/about.html" in out and "web/story/demo-eu-data-fine.html" in out
+    assert (web_root(project) / "index.html").is_file()
+
+
+def test_cli_main_reports_missing_templates(project, monkeypatch, capsys):
+    monkeypatch.setenv(ENV_ROOT, str(project))
+    monkeypatch.setattr(site, "PACKAGE_ROOT", project / "nowhere")
+    assert site_main(["--packs", str(FIXTURE)]) == 1
+    assert "模板" in capsys.readouterr().err
