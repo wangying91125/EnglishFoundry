@@ -1,0 +1,526 @@
+{
+  "note": "foundry.pipeline 的 dry-run 离线素材：示例文章 + 两份母版模板（按 event 与文章对应）。不联网、不调 LLM。",
+  "articles": [
+    {
+      "event": "eu-data-fine",
+      "source": "Deutsche Welle",
+      "category": "news",
+      "title": "European regulators fine a social network 430 million euros over data transfers",
+      "url": "https://example.org/englishfoundry/dry-run/eu-regulators-fine-social-network",
+      "age_hours": 2,
+      "content": "European regulators have fined a large social network 430 million euros after finding that it moved the personal data of European users onto servers in the United States without adequate legal protection. The national data protection authority said the transfers continued even though a European court had twice annulled the framework the company relied on. The network serves about thirty million people in the region and must stop the transfers within six months or face periodic penalties. A spokesperson said the ruling is disappointing and that the company will appeal.",
+      "tags": [
+        "GDPR",
+        "data protection",
+        "EU"
+      ]
+    },
+    {
+      "event": "eu-data-fine",
+      "source": "The Guardian",
+      "category": "news",
+      "title": "EU regulators fine a social network 430 million euros over cross-border data transfers",
+      "url": "https://example.org/englishfoundry/dry-run/eu-cross-border-data-fine",
+      "age_hours": 5,
+      "content": "Regulators in the European Union imposed a record fine on a social network of 430 million euros over cross-border data transfers on Thursday, saying the company failed to protect users' personal information when it sent it to the United States. The decision, the largest of its kind so far, gives the group six months to change how it moves data or pay further daily penalties. The firm, which denies any wrongdoing, said it intends to appeal the order in a domestic court.",
+      "tags": [
+        "privacy",
+        "regulation"
+      ]
+    },
+    {
+      "event": "ai-coding-assistant",
+      "source": "TechCrunch",
+      "category": "tech",
+      "title": "AI coding assistants move into the daily workflow of software teams",
+      "url": "https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow",
+      "age_hours": 1,
+      "content": "Two industry surveys published this month suggest that most professional developers now use an AI coding assistant at least once per working day, chiefly to generate unit tests, explain legacy code and scaffold new services. Managers report faster delivery on routine tasks. Yet the same reports warn that generated code can compile, pass a weak test and still hide a subtle defect, so several firms are adding provenance notes to commits and excluding security-critical modules from machine authored changes.",
+      "tags": [
+        "AI",
+        "developer tools"
+      ]
+    },
+    {
+      "event": "ai-coding-assistant",
+      "source": "Ars Technica",
+      "category": "tech",
+      "title": "AI coding assistants are now part of the daily workflow at many software teams",
+      "url": "https://example.org/englishfoundry/dry-run/ai-coding-assistants-surveys",
+      "age_hours": 8,
+      "content": "Software teams are quietly rewriting their engineering rules as AI coding assistants become part of the daily workflow, according to two surveys released this week. The tools are used most for tests and for reading other people's code, and engineers say routine work contracts noticeably. The caveat is review: because a model can produce plausible code that fails in unusual cases, companies now log which hunks came from a model, run static analysis before merge, and keep payment and encryption paths out of generated changes.",
+      "tags": [
+        "AI",
+        "engineering culture"
+      ]
+    }
+  ],
+  "packs": [
+    {
+      "event": "eu-data-fine",
+      "levels": {
+        "A1": {
+          "title": "Europe Says the Big App Must Stop",
+          "body": "Europe says a big social app did something wrong. The app took people's info and sent it to the United States. Europe says that is not OK. The app must pay a lot of money. It must stop sending the info away. The app says it will fight the rule. Many people in Europe use the app every day."
+        },
+        "A2": {
+          "title": "EU fines a social network 430 million euros",
+          "body": "Regulators in the European Union have fined a large social network 430 million euros. The network sent personal data about European users to servers in the United States. EU law says that this data must be safe, and the regulators said it was not safe enough. The company has about thirty million users in Europe. It must stop the transfers in six months. The company does not agree and wants to appeal, so the fine may change."
+        },
+        "B1": {
+          "title": "European regulators fine a social network 430 million euros over data transfers",
+          "body": "Regulators in the European Union have fined a large social network 430 million euros. The company sent personal data of European users to servers in the United States. Under EU law, such transfers need strong legal protection, and officials found that protection was missing. The network serves about thirty million users in Europe, so the case affects many people. Officials ordered the company to stop the transfers within six months. A company spokesperson said it disagrees with the ruling and will appeal, so the final penalty may still change."
+        },
+        "B2": {
+          "title": "EU imposes 430 million euro penalty on social network for unlawful data transfers",
+          "body": "European Union regulators have imposed a 430 million euro penalty on a major social network after finding that it moved personal data belonging to European users onto servers in the United States without adequate legal safeguards. Data protection law in the bloc permits cross border transfers only when the receiving country offers protection that is essentially equivalent to EU standards, a test the network failed to meet. Because roughly thirty million people in Europe use the service, the ruling has consequences far beyond the single company concerned. Authorities have given the firm a six month deadline to suspend the transfers, although it disputes the findings and intends to appeal, which means the sum could still be reduced."
+        },
+        "C1": {
+          "title": "Brussels levies a 430 million euro fine as it presses the network to halt transatlantic data flows",
+          "body": "Brussels has levied a 430 million euro fine on a prominent social network, concluding that its practice of routing European users' personal data to United States servers fell short of the safeguards that EU data protection law requires. Transfers of that kind are lawful only where the destination jurisdiction delivers a level of protection essentially equivalent to the Union's own, and the regulator concluded that the company's contractual assurances were insufficient to bridge that gap. With some thirty million European account holders, the decision signals how far the bloc is prepared to push its digital rules beyond its borders. The company has been ordered to suspend the flows within six months; it contests the findings and has signalled an appeal, leaving both the amount and the timetable open to revision."
+        },
+        "C2": {
+          "title": "A 430 million euro reckoning: the EU reasserts jurisdiction over transatlantic data",
+          "body": "In a decision that reframes the fragile architecture governing transatlantic data flows, EU supervisors have levied a 430 million euro sanction against a dominant social network, finding that its onward transfer of Europeans' personal data to American infrastructure lacked the essentially equivalent protection the bloc's statute demands. The ruling is less about the sum than about the reasoning: contractual guarantees, the regulator suggests, cannot substitute for a legal order that furnishes enforceable rights against state access. Its reach is considerable, encompassing some thirty million account holders and, by extension, the compliance calculus of every firm that pipelines European data westward. The company, which disputes the findings and has foreshadowed an appeal, must halt the transfers within six months, a deadline that will almost certainly be tested, and perhaps recalibrated, in the appellate courts."
+        }
+      },
+      "bilingual": [
+        {
+          "en": "Regulators in the European Union have fined a large social network 430 million euros.",
+          "zh": "欧盟的监管机构对一家大型社交网络处以 4.3 亿欧元罚款。"
+        },
+        {
+          "en": "The company sent personal data of European users to servers in the United States.",
+          "zh": "该公司把欧洲用户的个人数据传输到了设在美国的服务器上。"
+        },
+        {
+          "en": "Under EU law, such transfers need strong legal protection, and officials found that protection was missing.",
+          "zh": "根据欧盟法律，这类数据传输需要强有力的法律保护，而监管方认定相关保护并不存在。"
+        },
+        {
+          "en": "The network serves about thirty million users in Europe, so the case affects many people.",
+          "zh": "该社交网络在欧洲服务约三千万用户，因此本案影响面很广。"
+        },
+        {
+          "en": "Officials ordered the company to stop the transfers within six months.",
+          "zh": "监管方责令该公司在六个月内停止这些数据传输。"
+        },
+        {
+          "en": "A company spokesperson said it disagrees with the ruling and will appeal, so the final penalty may still change.",
+          "zh": "公司发言人表示不认可这一裁决并将提起上诉，因此最终罚款额仍可能变化。"
+        }
+      ],
+      "vocabulary": [
+        {
+          "word": "regulator",
+          "pos": "n.",
+          "zh": "监管机构；监管者",
+          "en_def": "An official body or person that makes sure companies obey the rules of an industry.",
+          "example": "The Irish regulator opened a new inquiry into how the app handles children's data."
+        },
+        {
+          "word": "fine",
+          "pos": "v.",
+          "zh": "罚款",
+          "en_def": "To make a person or company pay money as a punishment for breaking a rule.",
+          "example": "Authorities fined the operator after discovering that safety checks had been skipped."
+        },
+        {
+          "word": "transfer",
+          "pos": "n.",
+          "zh": "传输；转移（数据）",
+          "en_def": "The movement of something from one place, system or country to another.",
+          "example": "Every international money transfer is recorded and checked for fraud."
+        },
+        {
+          "word": "personal data",
+          "pos": "n. phr.",
+          "zh": "个人数据；个人信息",
+          "en_def": "Information about a person that can identify them, such as a name, address or phone number.",
+          "example": "Giving your date of birth means handing over personal data to a stranger."
+        },
+        {
+          "word": "safeguard",
+          "pos": "n.",
+          "zh": "保障措施",
+          "en_def": "A measure designed to prevent harm or misuse.",
+          "example": "Encryption is a basic safeguard for any company that stores customer records."
+        },
+        {
+          "word": "violate",
+          "pos": "v.",
+          "zh": "违反；侵犯",
+          "en_def": "To break a law, rule or agreement.",
+          "example": "The court found that the site had violated users' privacy rights."
+        },
+        {
+          "word": "ruling",
+          "pos": "n.",
+          "zh": "裁决；判决",
+          "en_def": "An official decision made by a court or a body with authority.",
+          "example": "The ruling surprised many analysts, who had expected a much smaller penalty."
+        },
+        {
+          "word": "appeal",
+          "pos": "v.",
+          "zh": "上诉；申诉",
+          "en_def": "To ask a higher court or authority to examine and change a decision.",
+          "example": "The firm said it will appeal the decision within the next three months."
+        },
+        {
+          "word": "compliance",
+          "pos": "n.",
+          "zh": "合规；遵从",
+          "en_def": "The act of doing what a rule, law or standard requires.",
+          "example": "The bank hired dozens of staff to deal with compliance paperwork."
+        },
+        {
+          "word": "penalty",
+          "pos": "n.",
+          "zh": "处罚；罚金",
+          "en_def": "A punishment, usually a payment of money, for breaking a rule.",
+          "example": "Repeat offenders face a penalty that can reach four percent of global revenue."
+        },
+        {
+          "word": "suspend",
+          "pos": "v.",
+          "zh": "暂停；中止",
+          "en_def": "To stop something temporarily or to officially order it to stop.",
+          "example": "The platform was forced to suspend the feature until new safeguards were added."
+        },
+        {
+          "word": "deadline",
+          "pos": "n.",
+          "zh": "截止日期；最后期限",
+          "en_def": "A time or date by which something must be finished.",
+          "example": "Officials set a six month deadline for the company to change its systems."
+        }
+      ],
+      "grammar": [
+        {
+          "sentence": "Under EU law, such transfers need strong legal protection, and officials found that protection was missing.",
+          "point": "并列句 + that 引导的宾语从句",
+          "explanation_zh": "and 前后各是一个完整分句，构成并列句。后一分句中 that protection was missing 作 found 的宾语从句，that 在新闻体中常被省略；从句内部必须用陈述语序（主语 protection + 谓语 was missing），不能写成疑问句语序。"
+        },
+        {
+          "sentence": "The network serves about thirty million users in Europe, so the case affects many people.",
+          "point": "so 引导的结果状语从句",
+          "explanation_zh": "so 连接因果关系，前因后果，前面的逗号不可省略。serves 用一般现在时表示平台的常态规模；英文新闻常用一般现在时叙述刚发生的事，让读者感到事件仍在发酵。"
+        },
+        {
+          "sentence": "A company spokesperson said it disagrees with the ruling and will appeal, so the final penalty may still change.",
+          "point": "并列谓语 + 情态动词表推测",
+          "explanation_zh": "disagrees 与 will appeal 由 and 连接并共用主语 it，第二个动词前不再重复主语。may still change 中 may 表示可能性推测，still 提醒结果尚未确定；这类缓和语气在报道未决诉讼时几乎成了固定写法。"
+        }
+      ],
+      "background_zh": "欧盟《通用数据保护条例》（GDPR）规定，个人数据出境必须获得与欧盟“实质等同”的保护。欧美之间的跨境传输框架曾多次被欧盟法院推翻，企业只能依赖标准合同条款。本案罚款按上一财年全球营业额的一定比例计算，并附带六个月内停止传输的整改令；上诉期间，金额与期限均可能被调整。",
+      "listening_script": "Hi, welcome back to today's easy news. Let's talk about a big fine. Regulators in the European Union have just told a large social network to pay 430 million euros. Why? Because the company moved the personal data of European users onto servers in the United States, and EU law says that is only allowed when the data stays well protected. Officials checked, and they decided it was not. So the company has six months to stop. Now here is the interesting part. The company says this is not fair, and it will appeal. That means a higher authority will look at the case again, and the number may change. If you want one phrase to remember today, take this one: cross border data transfer. See you tomorrow.",
+      "speaking": {
+        "questions": [
+          "Do you think a government should be able to stop a company from moving data to another country? Why or why not?",
+          "Would you give up some privacy if it meant free apps and faster services? Explain with an example from your own life.",
+          "If your country fined a foreign technology company, what should that money be used for?"
+        ],
+        "roleplay": {
+          "title": "The press conference",
+          "scenario": "A social network has just been fined 430 million euros. At a press conference, journalists ask why the company keeps appealing while users lose control of their own data.",
+          "roles": [
+            "Journalist: ask hard questions about safety, the deadline and who really pays the price.",
+            "Company spokesperson: defend the business, promise fixes, and avoid admitting fault."
+          ],
+          "task": "Talk for three minutes. Use at least four words from today's vocabulary, and finish with one sentence both sides can agree on."
+        }
+      },
+      "writing": {
+        "topic": "Some people believe that governments should fine technology companies for mishandling personal data, while others think such penalties damage innovation. Discuss both views and give your own opinion.",
+        "essay": "Personal data is now one of the most valuable commodities of the internet age, and Europe's fine on a social network asks who should pay when it is mishandled. In my view, financial penalties are necessary, provided they are fair and clearly defined. Supporters of heavy fines argue that money is the only language global companies understand. A technology firm rarely changes its behaviour after a polite warning, but a penalty worth several months of profit concentrates the minds of executives immediately. A fine is therefore not a punishment for success but the price of breaking a promise made to users. Critics counter that such penalties hurt consumers, because companies recover the cost through slower innovation or paid features. That argument is weaker than it looks. Data protection is not a luxury service; it is the condition under which people agree to use a platform at all. If a business can survive only by ignoring that condition, the problem is the business model, not the regulator. In conclusion, fines are justified when rules are published in advance and applied equally to every firm. Without enforcement, privacy law becomes a suggestion, and users have nowhere to appeal."
+      },
+      "quiz": [
+        {
+          "q": "Why did EU regulators fine the social network?",
+          "choices": [
+            "It charged European users hidden subscription fees.",
+            "It moved European users' personal data to US servers without adequate protection.",
+            "It refused to delete the accounts of underage users.",
+            "It published false information during an election."
+          ],
+          "answer": "B",
+          "explain": "细节题。定位 B1 正文第 1-3 句：罚款原因是个人数据跨境传输缺少法律保护。A（乱收费）、C（未成年人账号）、D（虚假信息）原文均未提及，属于无中生有。"
+        },
+        {
+          "q": "What must the company do within six months?",
+          "choices": [
+            "Stop the data transfers.",
+            "Pay the fine in two instalments.",
+            "Move its European headquarters to Brussels.",
+            "Sell the network to a European investor."
+          ],
+          "answer": "A",
+          "explain": "细节题。Officials ordered the company to stop the transfers within six months 直接对应 A。其余选项都是原文没有的措施。"
+        },
+        {
+          "q": "The word appeal in the passage is closest in meaning to ___.",
+          "choices": [
+            "attract public attention",
+            "ask a higher authority to review the decision",
+            "reach a settlement quietly",
+            "cancel the company's licence"
+          ],
+          "answer": "B",
+          "explain": "词义题。appeal 在法律语境中意为“上诉”，即请求上级机关重新审查裁决，故选 B。它另有“吸引”之义（This city appeals to young artists），需按语境判断。"
+        },
+        {
+          "q": "Which statement best reflects the company's position?",
+          "choices": [
+            "It admits the mistake and will accept the fine.",
+            "It disagrees with the ruling and will challenge it.",
+            "It says EU law does not apply to it at all.",
+            "It has already stopped the transfers voluntarily."
+          ],
+          "answer": "B",
+          "explain": "推断题。末句说公司 disagrees with the ruling and will appeal，即不认可并将继续争讼，故 B 正确。A 的“认错”与 C 的“完全不适用”均与原文矛盾。"
+        },
+        {
+          "q": "What can we infer about the final penalty?",
+          "choices": [
+            "It is already fixed and cannot change.",
+            "It may be reduced if the appeal succeeds.",
+            "It will be doubled by the appellate court.",
+            "It will be shared with the United States."
+          ],
+          "answer": "B",
+          "explain": "推断题。the final penalty may still change 说明金额尚未确定，上诉成功可能下调，故 B 正确。A 与之直接矛盾，C、D 无依据。"
+        }
+      ]
+    },
+    {
+      "event": "ai-coding-assistant",
+      "levels": {
+        "A1": {
+          "title": "Programmers Get New Helpers",
+          "body": "Many programmers now use a new kind of tool. The tool writes computer code with them. It can finish a line, or make a small test. People say it saves time. But some workers check the result twice, because the tool can make mistakes. Companies are still learning how to use it in a safe way."
+        },
+        "A2": {
+          "title": "AI coding helpers join the daily workflow",
+          "body": "AI coding assistants are now part of the daily work of many software teams. They suggest the next lines of code, write simple tests and explain old programs. Two surveys published this month say most developers use such a tool at least once a day. Teams like them for boring tasks, but senior engineers still review the results, because the tools can produce code that looks right and fails later."
+        },
+        "B1": {
+          "title": "AI coding assistants move into the daily workflow of software teams",
+          "body": "Artificial intelligence coding assistants have moved from a novelty to an ordinary part of the working day for many software teams. The tools complete half-written functions, generate unit tests, translate code between languages and explain unfamiliar repositories in plain sentences. Two industry surveys published this month suggest that a majority of professional developers now open an assistant at least once per working day, and that the most common uses are writing tests and reading other people's code. Managers report that routine tasks contract, which frees engineers for design work. Yet the evidence also carries a warning: models sometimes produce code that compiles, passes a weak test and still hides a subtle error. Several companies therefore keep a human review step in their pipeline, ban generated code in security-critical modules, and ask teams to record which parts of a change came from a model. The tools are changing hiring as well, since some employers now test whether a candidate can direct an assistant instead of only asking them to write code from memory."
+        },
+        "B2": {
+          "title": "Copilots become routine, and engineering managers rewrite the rules",
+          "body": "What began as an autocomplete curiosity has settled into the routine of mainstream software engineering. According to two surveys released this month, most professional developers now consult an AI coding assistant every working day, chiefly to scaffold tests, to refactor legacy modules and to summarise code they did not write. The productivity claims are credible but uneven. Tasks that are well specified and heavily tested contract noticeably, whereas ambiguous work can expand, because reviewing plausible-looking machine code consumes the same scarce attention as reviewing a junior colleague's pull request. Firms are responding with governance rather than enthusiasm: logging which hunks a model authored, excluding cryptographic and payment paths from generated changes, and running static analysis before merge. The labour market is shifting too. Interview exercises increasingly reward the ability to specify requirements, evaluate proposals and debug unfamiliar output, skills that look less like typing syntax and more like the judgement engineers have always exercised over other people's code."
+        },
+        "C1": {
+          "title": "Assistants reshape the software lifecycle, not merely the keyboard",
+          "body": "The interesting consequence of ubiquitous code assistants is architectural rather than mechanical. When the marginal cost of producing a first draft of a function collapses, the binding constraint migrates to specification, verification and review, all of which remain stubbornly human. Empirical reports are consistent with that reading: cycle times shrink most for well-specified, exhaustively tested work, and occasionally lengthen for exploratory tasks, where evaluating plausible but subtly incorrect output taxes the same attention budget as mentoring a junior engineer. Consequently firms are institutionalising a paper trail, since provenance metadata for model-authored hunks, carve-outs for cryptographic and settlement code, and mandatory static analysis before merge all appear in new internal policies. Hiring practices follow the same logic, since prompt formulation, differential diagnosis of generated code and the design of discriminating tests are now easier to observe in an interview than rote syntax recall. Whether this raises aggregate quality or merely redistributes error upstream into review queues is an open question, and the honest surveys acknowledge the uncertainty rather than resolve it."
+        },
+        "C2": {
+          "title": "The economics of drafting, the scarcity of judgement",
+          "body": "Dispatching the cost of a first draft relocates scarcity from transcription to adjudication, and the recent survey literature reads less as a productivity referendum than as an account of that migration. Where intent is crisp and oracles are dense, throughput improves almost tautologically; where intent is contested, the reviewer inherits an adversarial corpus of confidently worded mediocrity and pays for it in the only currency engineering has, namely attention. Organisational responses therefore resemble financial regulation more than tooling: provenance as metadata, carve-outs for the settlement and cryptographic paths, static analysis as an enforcement mechanism rather than advice. Pedagogically the frontier is quietly normative, since interviews now sample specification and differential debugging, syntax recall having always been a proxy for something else. The genuinely unresolved question is compositional. If drafting is cheap, the bottleneck becomes the review queue, and one may reasonably suspect that the aggregate defect rate is not eliminated but displaced, surfacing later, downstream, and in the ledger of another team."
+        }
+      },
+      "bilingual": [
+        {
+          "en": "Artificial intelligence coding assistants have moved from a novelty to an ordinary part of the working day for many software teams.",
+          "zh": "对许多软件团队而言，AI 编程助手已从新鲜玩意变成日常工作里的寻常一员。"
+        },
+        {
+          "en": "Two industry surveys published this month suggest that a majority of professional developers now open an assistant at least once per working day.",
+          "zh": "本月发布的两份行业调查显示，多数职业开发者现在每个工作日至少会打开一次编程助手。"
+        },
+        {
+          "en": "Yet the evidence also carries a warning: models sometimes produce code that compiles, passes a weak test and still hides a subtle error.",
+          "zh": "但证据同时也附有警示：模型有时给出的代码能够编译、能通过松散的测试，却仍藏着不易察觉的错误。"
+        },
+        {
+          "en": "Several companies therefore keep a human review step in their pipeline and exclude security-critical modules from generated changes.",
+          "zh": "因此一些公司仍在流程中保留人工评审环节，并把安全攸关的模块排除在自动生成改动之外。"
+        }
+      ],
+      "vocabulary": [
+        {
+          "word": "assistant",
+          "pos": "n.",
+          "zh": "助手；（软件）助理程序",
+          "en_def": "A program that helps a person complete a task, often by suggesting the next step.",
+          "example": "She keeps the coding assistant open all day but reads every suggestion before accepting it."
+        },
+        {
+          "word": "workflow",
+          "pos": "n.",
+          "zh": "工作流程",
+          "en_def": "The ordered set of steps a team follows to turn work from start to finish.",
+          "example": "Adding a review step to the workflow slowed releases but cut the number of rollbacks."
+        },
+        {
+          "word": "generate",
+          "pos": "v.",
+          "zh": "生成；产生",
+          "en_def": "To produce something, especially text or code, by machine rather than by hand.",
+          "example": "The tool can generate tests for a function in seconds."
+        },
+        {
+          "word": "unit test",
+          "pos": "n. phr.",
+          "zh": "单元测试",
+          "en_def": "A small automated check that one piece of code behaves as expected.",
+          "example": "No change reaches the main branch without a passing unit test."
+        },
+        {
+          "word": "legacy",
+          "pos": "adj.",
+          "zh": "遗留的；旧系统产生的",
+          "en_def": "Relating to old program code that is still in use and usually hard to change safely.",
+          "example": "The assistant explained the legacy module better than the missing documentation did."
+        },
+        {
+          "word": "repository",
+          "pos": "n.",
+          "zh": "代码仓库",
+          "en_def": "The stored collection of a project's files and their revision history.",
+          "example": "A new engineer can now explore the whole repository without asking for a tour."
+        },
+        {
+          "word": "review",
+          "pos": "n. / v.",
+          "zh": "评审；检查",
+          "en_def": "A careful examination of work by another person before it is accepted.",
+          "example": "Human review remains the last line of defence against plausible but wrong code."
+        },
+        {
+          "word": "vulnerable",
+          "pos": "adj.",
+          "zh": "易受攻击的；脆弱的",
+          "en_def": "Exposed to damage, attack or error.",
+          "example": "Payment modules are considered too vulnerable to accept machine-written changes."
+        },
+        {
+          "word": "scaffold",
+          "pos": "v.",
+          "zh": "搭骨架；生成框架代码",
+          "en_def": "To create the basic structure of something so that details can be added later.",
+          "example": "He asked the tool to scaffold the API and then rewrote half of it."
+        },
+        {
+          "word": "throughput",
+          "pos": "n.",
+          "zh": "产出率；吞吐量",
+          "en_def": "The amount of work a system completes in a given period.",
+          "example": "Team throughput rose by a fifth, though review comments rose with it."
+        },
+        {
+          "word": "provenance",
+          "pos": "n.",
+          "zh": "来源；出处记录",
+          "en_def": "The record of where something came from and who changed it.",
+          "example": "The commit message records the provenance of every machine-authored hunk."
+        },
+        {
+          "word": "carve-out",
+          "pos": "n.",
+          "zh": "例外条款；排除范围",
+          "en_def": "A part of a rule that is officially excluded from it.",
+          "example": "Encryption code is a carve-out in the policy that otherwise welcomes generated changes."
+        }
+      ],
+      "grammar": [
+        {
+          "sentence": "Several companies therefore keep a human review step in their pipeline, ban generated code in security-critical modules, and ask teams to record which parts of a change came from a model.",
+          "point": "并列谓语 + 宾语从句",
+          "explanation_zh": "keep / ban / ask 三个动词由 and 连接并共用主语 several companies，第二个 and 前的逗号是英文常见的系列逗号。ask 后接不定式（ask teams to record），record 后跟 which 引导的宾语从句，从句内部用陈述语序 parts ... came from a model，不可写成疑问语序。"
+        },
+        {
+          "sentence": "Tasks that are well specified and heavily tested contract noticeably, whereas ambiguous work can expand.",
+          "point": "定语从句 + whereas 对比状语从句",
+          "explanation_zh": "that are well specified and heavily tested 修饰 tasks，两个过去分词共用系动词 are。whereas 表示对比而非原因，语气比 while 更书面；contract 与 expand 构成反义对照，是学术与商业英语常用的平行结构。"
+        },
+        {
+          "sentence": "Interview exercises increasingly reward the ability to specify requirements, evaluate proposals and debug unfamiliar output.",
+          "point": "不定式并列",
+          "explanation_zh": "the ability to 后并列三个不定式（specify / evaluate / debug），它们共用一个 to，第二个和第三个 to 必须省略才自然。reward 在此意为“给予回报／看重”，主语是 exercises 而非人，写作中常用于表达“面试考什么／奖励什么能力”。"
+        }
+      ],
+      "background_zh": "生成式编程助手自 2021 年起规模化商用，2023 年后从补全代码转向生成测试、解释仓库与自动重构。行业调查多以自报数据为主，样本偏向大厂或开源项目，结论常被夸大；安全、许可证与责任归属是企业设置例外条款的主要原因。",
+      "listening_script": "Hi, welcome back to today's easy news. Today's word is workflow. Artificial intelligence coding assistants are no longer a party trick. Two surveys out this month say most professional developers open an assistant at least once every working day. What do they use it for? Mostly for boring jobs: writing tests, explaining old code, and turning one language into another. Managers say routine tasks finish faster, so engineers can spend more time on design. But there is a catch, and the surveys say it plainly. Sometimes the tool writes code that compiles, passes a weak test, and still hides a small mistake. So a growing number of companies keep a human in the loop, and simply ban generated code in the most sensitive modules, such as payment or encryption. One phrase to remember today: human review. See you tomorrow.",
+      "speaking": {
+        "questions": [
+          "Your team adopts a coding assistant tomorrow. Which two tasks do you allow it to do without review, and why?",
+          "Some argue that generated code should always be labelled in the commit history. Do you agree, and who should check the label?",
+          "If an assistant makes a junior engineer twice as fast, should the salary of that role change? Explain your reasoning."
+        ],
+        "roleplay": {
+          "title": "The release meeting",
+          "scenario": "A feature built with an AI assistant contains a subtle bug that costs the company a day of lost orders. The engineering lead, who pushed for adoption, and the finance lead, who pays for incidents, must agree on rules before the next release.",
+          "roles": [
+            "Engineering lead: defend the speed gains, propose carve-outs and a provenance log.",
+            "Finance lead: quantify the incident, insist on review for payment code, ask who owns the mistake."
+          ],
+          "task": "Talk for three minutes and leave the room with exactly three written rules. Use at least four words from today's vocabulary, and state which rule costs the team the most time."
+        }
+      },
+      "writing": {
+        "topic": "Some people believe AI coding assistants make software teams faster without lowering quality, while others argue that they simply shift errors into the review stage. Discuss both views and give your own opinion.",
+        "essay": "Coding assistants promise speed, and recent surveys suggest that many teams already depend on them. In my view the tools genuinely shorten routine work, but only where review is strong enough to absorb the mistakes they create. Supporters point to boring tasks. Writing tests, renaming a module and explaining old code are quick for a machine and tedious for a human, so teams report shorter cycles and happier engineers. If an assistant can draft a first version, a senior developer spends attention on design instead of typing. Critics answer that part of the saving is an illusion. Generated code often compiles and passes a weak test while hiding a subtle error, which converts a typing task into a reading task and lands in someone's review queue. Their argument is not that models are useless, but that cheap drafting raises the price of judgement. I agree with the second group on one condition: quality depends on the process around the tool. Where provenance is logged, sensitive modules are excluded and tests are strict, the speed gain is real. Where review is thin, the bug merely moves downstream. Teams should therefore buy discipline before they buy assistants."
+      },
+      "quiz": [
+        {
+          "q": "According to the two surveys, what do most professional developers now do every working day?",
+          "choices": [
+            "Open an AI coding assistant at least once.",
+            "Write all of their tests by hand.",
+            "Attend a review meeting about generated code.",
+            "Rotate to a different programming language."
+          ],
+          "answer": "A",
+          "explain": "细节题。B1 正文指出 a majority of professional developers now open an assistant at least once per working day，故选 A。B、C、D 均无原文依据。"
+        },
+        {
+          "q": "Why do several companies keep a human review step?",
+          "choices": [
+            "Because models refuse to write unit tests.",
+            "Because generated code can compile, pass a weak test and still hide an error.",
+            "Because engineers are not allowed to use the tools.",
+            "Because review is faster than writing code by hand."
+          ],
+          "answer": "B",
+          "explain": "因果细节题。原文说明模型有时会产出“能编译、能通过松散测试却仍藏着错误”的代码，因此保留人工评审，B 正确；A、C 与原文相反，D 未提及。"
+        },
+        {
+          "q": "The word contract in the sentence \"...contract noticeably, whereas ambiguous work can expand\" is closest in meaning to ___.",
+          "choices": [
+            "become shorter",
+            "become more expensive",
+            "grow larger",
+            "vanish completely"
+          ],
+          "answer": "A",
+          "explain": "词义推断题。contract 与 expand 由 whereas 构成对比，expand 指耗时变长，故 contract 指耗时缩短，选 A。"
+        },
+        {
+          "q": "Which change is most likely to be excluded from generated code by company policy?",
+          "choices": [
+            "A user interface colour change.",
+            "A documentation typo fix.",
+            "A modification in security-critical modules.",
+            "A new unit test for a helper function."
+          ],
+          "answer": "C",
+          "explain": "细节题。原文提到公司把 security-critical modules（安全攸关模块）排除在自动生成改动之外，C 正确；A、B、D 属于低风险或非核心改动。"
+        },
+        {
+          "q": "What can be inferred about hiring from the passage?",
+          "choices": [
+            "Employers no longer hire engineers who type slowly.",
+            "Interviews increasingly test how candidates direct and check an assistant's output.",
+            "Companies require candidates to buy their own licence.",
+            "Coding tests have been abandoned across the industry."
+          ],
+          "answer": "B",
+          "explain": "推断题。末段指出一些雇主改为考察候选人指挥助手的能力，即如何提出需求并检验输出，B 正确。A、C 无依据，D 表述过于绝对。"
+        }
+      ]
+    }
+  ]
+}
