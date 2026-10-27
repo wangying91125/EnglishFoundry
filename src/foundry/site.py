@@ -944,6 +944,8 @@ def discover_posts(
         except OSError as error:
             log.warning("读不了 %s：%s", path, error)
             continue
+        if platform_key and role_key == "*":
+            log.debug("平台文案 %s 认不出归属角色，只在 %s 目录里留着", "/".join(parts), loaded.rel(root))
         if platform_key:
             entry = found.setdefault((story_id, role_key), {"markdown": "", "markdown_from": "", "platforms": {}})
             entry["platforms"][platform_key] = text
@@ -1464,7 +1466,8 @@ def build_site(
         removed = (
             _prune_stale(target / "story", pages)
             + _prune_stale(target / "role", role_pages)
-            + _prune_stale(target / AUDIO_DIR_NAME, audio_copies, suffixes=(".mp3",))
+            # include_audio=False 时不清理音频：那是“这次不读音频”，不是“音频都作废了”
+            + (_prune_stale(target / AUDIO_DIR_NAME, audio_copies, suffixes=(".mp3",)) if include_audio else [])
         )
         if removed:
             log.info("清理过期产物：%s 个文件", len(removed))

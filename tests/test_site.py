@@ -469,6 +469,16 @@ def test_prune_removes_stale_audio_copies(settings):
     assert not copied.exists(), "站点里的过期音频副本该被 prune 掉"
 
 
+def test_no_audio_build_keeps_existing_copies(settings):
+    audio = settings.root / "output" / "audio"
+    audio.mkdir(parents=True, exist_ok=True)
+    kept = web_root(settings.root) / "audio"
+    kept.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(FIXTURE, kept / "keep-me.mp3")  # 上一版复制进来的音频
+    build_site(settings, packs=[FIXTURE], include_audio=False)
+    assert (kept / "keep-me.mp3").is_file(), "--no-audio 只是这次不读音频，不该删掉已有副本"
+
+
 def test_collect_stories_sorts_and_tags(settings):
     write_pack(project := settings.root, "demo-old", category="news", published="2026-10-20T00:00:00+00:00")
     write_pack(project, "demo-new", category="tech", published="2026-10-27T00:00:00+00:00", title="Newer container story")
