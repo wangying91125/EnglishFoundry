@@ -39,7 +39,7 @@ import logging
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any, Callable, Iterable, Mapping, Sequence
 
 from foundry.config import Settings, load_settings
 from foundry.fetcher import fetch_all
@@ -374,11 +374,11 @@ def run(
         stories = list(normalize(articles, loaded))
     except Exception as error:  # noqa: BLE001
         fail("normalize", "清洗聚合", error)
-    if articles and not stories and "normalize" not in [item.split(":")[0] for item in failures]:
-        fail("normalize", "清洗后没有可用 Story", "多半是全部超出 normalize.max_age_hours")
     if cap is not None:
         stories = stories[:cap]
-    _save_raw(loaded, articles, stories, failures, fail, enabled=not dry_run)
+    if articles and not stories and stages["normalize"] != "failed":
+        fail("normalize", "清洗后没有可用 Story", "多半是全部超出 normalize.max_age_hours")
+    _save_raw(loaded, articles, stories, fail, enabled=not dry_run)
     done("normalize")
     log.info("聚合：%s 个 Story（limit=%s）", len(stories), cap if cap is not None else "-")
 
@@ -549,8 +549,7 @@ def _save_raw(
     loaded: Settings,
     articles: Sequence[Article],
     stories: Sequence[Story],
-    failures: list[str],
-    fail: Any,
+    fail: Callable[[str, str, Any], None],
     *,
     enabled: bool,
 ) -> None:
