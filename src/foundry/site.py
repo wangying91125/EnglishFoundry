@@ -85,7 +85,6 @@ SITE_TAGLINE = "Daily English, levelled for you"
 SITE_TAGLINE_ZH = "每日全球英文 · 分级精读 · 听力跟读"
 DEFAULT_LEVEL = "B1"
 FALLBACK_CATEGORY = "news"
-MIN_LEVEL = "A1"
 MAX_QUIZ_LETTERS = "ABCDEFGH"
 SEARCH_HAYSTACK_CHARS = 1400
 MAX_ROLE_TAGS = 6
@@ -732,8 +731,12 @@ def _normalize_writing(value: Any) -> dict[str, Any]:
     return {"topic": topic, "essay": essay, "words": words} if (topic or essay) else {}
 
 
-def story_from_pack(pack: Any, *, roles: Mapping[str, Role] | None = None, settings: Settings | None = None) -> SiteStory:
-    """一个母版内容包 → :class:`SiteStory`（板块缺什么就少什么，元信息缺什么就兜底）。"""
+def story_from_pack(pack: Any, *, roles: Mapping[str, Role] | None = None) -> SiteStory:
+    """一个母版内容包 → :class:`SiteStory`（板块缺什么就少什么，元信息缺什么就兜底）。
+
+    ``pack`` 接受 :class:`~foundry.models.ContentPack`、母版 JSON 路径或映射；给了 ``roles`` 就用
+    :func:`foundry.roles.topic_match` 打角色标签（首页的角色筛选与角色页的归属都靠它）。
+    """
     coerced = _coerce_pack(pack)
     if coerced is None:
         raise SiteError("无法把输入转成 ContentPack")
@@ -1079,7 +1082,7 @@ def collect_stories(
         if coerced is None:
             continue
         try:
-            stories.append(story_from_pack(coerced, roles=table, settings=loaded))
+            stories.append(story_from_pack(coerced, roles=table))
         except Exception as error:  # 单个母版坏掉不影响整站
             log.warning("母版 %s 组装失败，跳过：%s", getattr(coerced, "story_id", "?"), error)
     stories.sort(key=lambda story: (story.published or datetime.min.replace(tzinfo=timezone.utc), story.id), reverse=True)
