@@ -1,0 +1,43 @@
+{# 站点骨架：英文为主 + 中文导航说明；纯静态，样式与脚本都是站内原生文件 #}
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ page_title }}{% endblock %}</title>
+<meta name="description" content="{{ page_description }}">
+<meta name="generator" content="foundry.site">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Ctext%20y='25'%20x='3'%20font-size='24'%3E%F0%9F%93%96%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="{{ root }}static/style.css">
+<script>document.documentElement.classList.replace('no-js', 'js');</script>
+</head>
+<body class="page-{{ page_kind }}">
+<a class="skip-link" href="#main">Skip to content 跳到正文</a>
+{% set current_href = {'index': 'index.html', 'about': 'about.html', 'story': 'index.html#library', 'role': 'index.html#roles'}[page_kind] %}
+<header class="masthead">
+  <a class="brand" href="{{ root }}index.html">
+    <span class="brand-badge" aria-hidden="true">EF</span>
+    <span class="brand-text">
+      <strong>{{ site_name }}</strong>
+      <small>{{ site_tagline }} · {{ site_tagline_zh }}</small>
+    </span>
+  </a>
+  <nav class="primary-nav" aria-label="Primary navigation 主导航">
+    <ul>
+      {% for item in nav %}
+      <li><a href="{{ root }}{{ item.href }}"{% if item.href == current_href %} class="is-current" aria-current="page"{% endif %}><span class="en">{{ item.en }}</span><span class="zh">{{ item.zh }}</span></a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+</header>
+<main id="main">
+{% block content %}{% endblock %}
+</main>
+<footer class="site-footer">
+  <p class="footer-brand"><strong>{{ site_name }}</strong> · {{ site_tagline }} — 静态站点，无后端、无 CDN，双击 <code>index.html</code> 即可离线阅读。</p>
+  <p class="footer-stats">Built {{ generated_at }} · {{ stats.stories }} stories 篇 · {{ stats.roles }} roles 角色 · {{ stats.platforms }} platforms 平台 · {{ stats.audio }} audio clips 音频</p>
+  <p class="footer-note">Text is adapted from public English sources for language study; original copyright stays with the publishers. 原文版权归来源所有。<a href="{{ root }}about.html">About 关于本站</a></p>
+</footer>
+<script src="{{ root }}static/app.js" defer></script>
+</body>
+</html>
