@@ -178,27 +178,27 @@ EOF
 	cat > "$APP_DIR/config/sources.yaml" << 'EOF'
 # 全球原版英文输入源
 defaults:
-	timeout: 20
-	max_age_hours: 24
-	user_agent: "EnglishFoundry/1.0 (+https://github.com)"
+  timeout: 20
+  max_age_hours: 24
+  user_agent: "EnglishFoundry/1.0 (+https://github.com)"
 sources:
-	- {id: bbc_world,   name: "BBC World",        category: news,      type: rss, enabled: true, url: "https://feeds.bbci.co.uk/news/world/rss.xml"}
-	- {id: npr_top,     name: "NPR News",         category: news,      type: rss, enabled: true, url: "https://feeds.npr.org/1001/rss.xml"}
-	- {id: guardian,    name: "The Guardian",     category: news,      type: rss, enabled: true, url: "https://www.theguardian.com/world/rss"}
-	- {id: nyt_home,    name: "The New York Times", category: news,    type: rss, enabled: true, url: "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"}
-	- {id: aljazeera,   name: "Al Jazeera",       category: news,      type: rss, enabled: true, url: "https://www.aljazeera.com/com/x/rss/all.xml"}
-	- {id: dw_all,      name: "Deutsche Welle",   category: news,      type: rss, enabled: true, url: "https://rss.dw.com/rdf/rss-en-all"}
-	- {id: reddit_world,name: "Reddit r/worldnews", category: community, type: rss, enabled: true, url: "https://www.reddit.com/r/worldnews/.rss"}
-	- {id: hn_front,    name: "Hacker News",      category: community, type: rss, enabled: true, url: "https://hnrss.org/frontpage"}
-	- {id: techcrunch,  name: "TechCrunch",       category: tech,      type: rss, enabled: true, url: "https://techcrunch.com/feed/"}
-	- {id: verge,       name: "The Verge",        category: tech,      type: rss, enabled: true, url: "https://www.theverge.com/rss/index.xml"}
-	- {id: wired,       name: "Wired",            category: tech,      type: rss, enabled: true, url: "https://www.wired.com/feed/rss"}
-	- {id: ars,         name: "Ars Technica",     category: tech,      type: rss, enabled: true, url: "https://feeds.arstechnica.com/arstechnica/index"}
-	- {id: mittr,       name: "MIT Technology Review", category: tech,  type: rss, enabled: true, url: "https://www.technologyreview.com/feed/"}
-	- {id: nasa,        name: "NASA",             category: science,   type: rss, enabled: true, url: "https://www.nasa.gov/feed/"}
-	- {id: nature,      name: "Nature",           category: academic,  type: rss, enabled: true, url: "https://www.nature.com/nature.rss"}
-	- {id: arxiv_cs,    name: "arXiv Computer Science", category: academic, type: rss, enabled: true, url: "https://export.arxiv.org/rss/cs"}
-	- {id: ted,         name: "TED Talks",        category: video,     type: rss, enabled: true, url: "https://feeds.feedburner.com/TEDTalks_audio"}
+  - {id: bbc_world,   name: "BBC World",        category: news,      type: rss, enabled: true, url: "https://feeds.bbci.co.uk/news/world/rss.xml"}
+  - {id: npr_top,     name: "NPR News",         category: news,      type: rss, enabled: true, url: "https://feeds.npr.org/1001/rss.xml"}
+  - {id: guardian,    name: "The Guardian",     category: news,      type: rss, enabled: true, url: "https://www.theguardian.com/world/rss"}
+  - {id: nyt_home,    name: "The New York Times", category: news,    type: rss, enabled: true, url: "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"}
+  - {id: aljazeera,   name: "Al Jazeera",       category: news,      type: rss, enabled: true, url: "https://www.aljazeera.com/com/x/rss/all.xml"}
+  - {id: dw_all,      name: "Deutsche Welle",   category: news,      type: rss, enabled: true, url: "https://rss.dw.com/rdf/rss-en-all"}
+  - {id: reddit_world,name: "Reddit r/worldnews", category: community, type: rss, enabled: true, url: "https://www.reddit.com/r/worldnews/.rss"}
+  - {id: hn_front,    name: "Hacker News",      category: community, type: rss, enabled: true, url: "https://hnrss.org/frontpage"}
+  - {id: techcrunch,  name: "TechCrunch",       category: tech,      type: rss, enabled: true, url: "https://techcrunch.com/feed/"}
+  - {id: verge,       name: "The Verge",        category: tech,      type: rss, enabled: true, url: "https://www.theverge.com/rss/index.xml"}
+  - {id: wired,       name: "Wired",            category: tech,      type: rss, enabled: true, url: "https://www.wired.com/feed/rss"}
+  - {id: ars,         name: "Ars Technica",     category: tech,      type: rss, enabled: true, url: "https://feeds.arstechnica.com/arstechnica/index"}
+  - {id: mittr,       name: "MIT Technology Review", category: tech,  type: rss, enabled: true, url: "https://www.technologyreview.com/feed/"}
+  - {id: nasa,        name: "NASA",             category: science,   type: rss, enabled: true, url: "https://www.nasa.gov/feed/"}
+  - {id: nature,      name: "Nature",           category: academic,  type: rss, enabled: true, url: "https://www.nature.com/nature.rss"}
+  - {id: arxiv_cs,    name: "arXiv Computer Science", category: academic, type: rss, enabled: true, url: "https://export.arxiv.org/rss/cs"}
+  - {id: ted,         name: "TED Talks",        category: video,     type: rss, enabled: true, url: "https://feeds.feedburner.com/TEDTalks_audio"}
 EOF
 	ok "项目骨架与 17 个全球源已生成"
 	touch "$STATE_DIR/scaffold.ok"
