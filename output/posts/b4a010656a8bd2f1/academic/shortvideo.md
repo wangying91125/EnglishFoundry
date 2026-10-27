@@ -1,0 +1,7 @@
+【3秒钩子】4.3亿欧元？这条英文新闻开场就一句，30 秒带你听懂👇
+
+【跟读】Brussels has levied a 430 million euro fine on a prominent social network, concluding that its practice of …
+【串讲】欧盟《通用数据保护条例》（GDPR）规定，个人数据出境必须获得与欧盟“实质等同”的保护。欧。
+【核心词】regulator（监管机构）；fine（罚款）；transfer（传输）
+【结尾】完整词表和音频在主页，评论区回「学习」。明天见👋
+#英语口语 #外刊听力 #每日英语打卡

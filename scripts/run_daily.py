@@ -125,6 +125,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(json.dumps(summary, ensure_ascii=False, indent=2))
     else:
         print(format_summary(summary))
+    sys.stdout.flush()  # 别和 logging（stderr）抢先后顺序
     return exit_code(summary)
 
 

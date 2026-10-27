@@ -47,7 +47,7 @@
 <p class="lede">工程师读文档的方式：直给、结构化、术语准确，不寒暄，讲清机制与影响面</p>    <ul class="pill-row">
       <li class="pill">Levels B2 / C1</li>
       <li class="pill pill-ghost">≤ 1350 words 词数上限</li>
-<li class="pill pill-ghost">6 modules 板块</li>      <li class="pill">0 stories 篇</li>
+<li class="pill pill-ghost">6 modules 板块</li>      <li class="pill">1 stories 篇</li>
     </ul>
   </div>
 </header>
@@ -65,15 +65,120 @@
   </div>
 </div>
 
-<section class="section">
-  <h2>Stories for this role · 本角色篇目</h2>
-  <p class="band-lede">No story matched this role&rsquo;s topics yet — browse everything below. 还没有命中本角色题材的篇目，可先看下面的全部故事。</p>
+<section class="section" aria-labelledby="role-stories-title">
+  <h2 id="role-stories-title">Stories for this role · 本角色篇目 <span class="count">1</span></h2>
+  <article class="role-story" id="story-fd677f5ea44ced7f">
+    <header class="role-story-head">
+      <p class="card-meta">
+<time datetime="2026-10-27">2026-10-27</time> ·        Tech <span class="zh">科技</span> · <span class="fit">fit 0.36</span>      </p>
+      <h3><a href="../story/fd677f5ea44ced7f.html">AI coding assistants move into the daily workflow of software teams</a></h3>
+      <p class="role-story-meta">
+        1334 words
+<span class="zh">· 取自 output/posts/fd677f5ea44ced7f/developer.md</span><a class="plain-link" href="../story/fd677f5ea44ced7f.html#listening">🎧 listening 听力</a>      </p>
+    </header>
+
+    <div class="markdown role-markdown"><h2>💻 Copilots become routine, and engineering managers rewrite the rules</h2>
+<blockquote><p>角色：<strong>程序员/技术</strong>（<code>developer</code>）</p><p>难度：B2 ｜ 词数上限：1350</p><p>讲解风格：工程师读文档的方式：直给、结构化、术语准确，不寒暄，讲清机制与影响面</p><p>本篇重点：技术英文阅读（RFC / 事故复盘）+ commit、PR、issue 里的地道表达</p><p>题材契合：命中 5/14 个方向关键词 → software、code、api、security、engineer</p></blockquote>
+<h3>📖 正文 · CEFR B2</h3>
+<p><strong>Copilots become routine, and engineering managers rewrite the rules</strong></p>
+<p>What began as an autocomplete curiosity has settled into the routine of mainstream software engineering. According to two surveys released this month, most professional developers now consult an AI coding assistant every working day, chiefly to scaffold tests, to refactor legacy modules and to summarise code they did not write. The productivity claims are credible but uneven. Tasks that are well specified and heavily tested contract noticeably, whereas ambiguous work can expand, because reviewing plausible-looking machine code consumes the same scarce attention as reviewing a junior colleague's pull request. Firms are responding with governance rather than enthusiasm: logging which hunks a model authored, excluding cryptographic and payment paths from generated changes, and running static analysis before merge. The labour market is shifting too. Interview exercises increasingly reward the ability to specify requirements, evaluate proposals and debug unfamiliar output, skills that look less like typing syntax and more like the judgement engineers have always exercised over other people's code.</p>
+<h3>🧭 背景速览</h3>
+<p>生成式编程助手自 2021 年起规模化商用，2023 年后从补全代码转向生成测试、解释仓库与自动重构。行业调查多以自报数据为主，样本偏向大厂或开源项目，结论常被夸大；安全、许可证与责任归属是企业设置例外条款的主要原因。</p>
+<h3>🔎 逐句精读</h3>
+<ul><li>Artificial intelligence coding assistants have moved from a novelty to an ordinary part of the working day for many software teams.<ul><li>译：对许多软件团队而言，AI 编程助手已从新鲜玩意变成日常工作里的寻常一员。</li></ul></li><li>Two industry surveys published this month suggest that a majority of professional developers now open an assistant at least once per working day.<ul><li>译：本月发布的两份行业调查显示，多数职业开发者现在每个工作日至少会打开一次编程助手。</li></ul></li><li>Yet the evidence also carries a warning: models sometimes produce code that compiles, passes a weak test and still hides a subtle error.<ul><li>译：但证据同时也附有警示：模型有时给出的代码能够编译、能通过松散的测试，却仍藏着不易察觉的错误。</li></ul></li><li>Several companies therefore keep a human review step in their pipeline and exclude security-critical modules from generated changes.<ul><li>译：因此一些公司仍在流程中保留人工评审环节，并把安全攸关的模块排除在自动生成改动之外。</li></ul></li></ul>
+<h3>📚 核心词汇（10 个）</h3>
+<div class="table-wrap"><table><thead><tr><th>#</th><th>单词</th><th>词性</th><th>中文</th><th>英文释义</th><th>例句</th></tr></thead><tbody><tr><td>1</td><td><strong>assistant</strong></td><td>n.</td><td>助手；（软件）助理程序</td><td>A program that helps a person complete a task, often by suggesting the next step.</td><td>She keeps the coding assistant open all day but reads every suggestion before accepting …</td></tr><tr><td>2</td><td><strong>workflow</strong></td><td>n.</td><td>工作流程</td><td>The ordered set of steps a team follows to turn work from start to finish.</td><td>Adding a review step to the workflow slowed releases but cut the number of …</td></tr><tr><td>3</td><td><strong>generate</strong></td><td>v.</td><td>生成；产生</td><td>To produce something, especially text or code, by machine rather than by hand.</td><td>The tool can generate tests for a function in seconds.</td></tr><tr><td>4</td><td><strong>unit test</strong></td><td>n. phr.</td><td>单元测试</td><td>A small automated check that one piece of code behaves as expected.</td><td>No change reaches the main branch without a passing unit test.</td></tr><tr><td>5</td><td><strong>legacy</strong></td><td>adj.</td><td>遗留的；旧系统产生的</td><td>Relating to old program code that is still in use and usually hard to change safely.</td><td>The assistant explained the legacy module better than the missing documentation did.</td></tr><tr><td>6</td><td><strong>repository</strong></td><td>n.</td><td>代码仓库</td><td>The stored collection of a project's files and their revision history.</td><td>A new engineer can now explore the whole repository without asking for a tour.</td></tr><tr><td>7</td><td><strong>review</strong></td><td>n. / v.</td><td>评审；检查</td><td>A careful examination of work by another person before it is accepted.</td><td>Human review remains the last line of defence against plausible but wrong code.</td></tr><tr><td>8</td><td><strong>vulnerable</strong></td><td>adj.</td><td>易受攻击的；脆弱的</td><td>Exposed to damage, attack or error.</td><td>Payment modules are considered too vulnerable to accept machine-written changes.</td></tr><tr><td>9</td><td><strong>scaffold</strong></td><td>v.</td><td>搭骨架；生成框架代码</td><td>To create the basic structure of something so that details can be added later.</td><td>He asked the tool to scaffold the API and then rewrote half of it.</td></tr><tr><td>10</td><td><strong>throughput</strong></td><td>n.</td><td>产出率；吞吐量</td><td>The amount of work a system completes in a given period.</td><td>Team throughput rose by a fifth, though review comments rose with it.</td></tr></tbody></table></div>
+<blockquote><p>⭐ 命中的 <strong>程序员/技术</strong> 方向关键词：software、code、api、security、engineer</p></blockquote>
+<h3>🔧 长难句拆解</h3>
+<p><strong>1. Several companies therefore keep a human review step in their pipeline, ban generated code in security-critical modules, and ask teams to record which parts of a change came from a model.</strong></p>
+<ul><li>语法点：并列谓语 + 宾语从句</li><li>讲解：keep / ban / ask 三个动词由 and 连接并共用主语 several companies，第二个 and 前的逗号是英文常见的系列逗号。ask 后接不定式（ask teams to record），record 后跟 which 引导的宾语从句，从句内部用陈述语序 parts ... came from a model，不可写成疑问语序。</li></ul>
+<p><strong>2. Tasks that are well specified and heavily tested contract noticeably, whereas ambiguous work can expand.</strong></p>
+<ul><li>语法点：定语从句 + whereas 对比状语从句</li><li>讲解：that are well specified and heavily tested 修饰 tasks，两个过去分词共用系动词 are。whereas 表示对比而非原因，语气比 while 更书面；contract 与 expand 构成反义对照，是学术与商业英语常用的平行结构。</li></ul>
+<h3>📝 小练习（2 题）</h3>
+<ol><li>According to the two surveys, what do most professional developers now do every working day?</li><li>Why do several companies keep a human review step?</li></ol>
+<details>
+<summary>✅ 参考答案与解析（点击展开）</summary>
+<p>答案速查：1.A　2.B</p>
+</details>
+<h3>🎯 收尾任务</h3>
+<p>今日任务：用 3 行英文写一份 incident summary（影响 / 根因 / 后续动作）。</p>
+<hr>
+<p><em>EnglishFoundry：母版 <code>fd677f5ea44ced7f</code>（fd677f5ea44ced7f.json） × 角色 <code>developer</code>（B2 / 上限 1350 词）</em> <em>配音建议：us_male · +5%</em></p></div>
+
+    <details class="nested drafts">
+      <summary>Publishing drafts 平台文案 <span class="zh">6 个平台</span></summary>
+      <details class="nested">
+        <summary>🍠 小红书 <span class="zh">xiaohongshu · zh · 120 words</span></summary>
+        <div class="markdown"><p>🍠 今天的英文头条，3 个关键词就够看懂</p>
+<p>📌 今日英文头条｜AI coding assistants move into the daily workflow of software teams</p>
+<p>🗞 一句话事件：What began as an autocomplete curiosity has settled into the routine of mainstream software engineering …</p>
+<p>🧠 词卡直接抄进备忘录（3 张） 1️⃣ assistant n.｜助手 2️⃣ workflow n.｜工作流程 3️⃣ generate v.｜生成</p>
+<p>今日任务：用 3 行英文写一份 incident summary（影响 / 根因 / 后续动作）。 #英语学习 #外刊精读 #每日英语打卡 #AI #Developertools #Engineeringculture</p></div>
+      </details>
+      <details class="nested">
+        <summary>📰 微信公众号 <span class="zh">wechat_mp · zh · 581 words</span></summary>
+        <div class="markdown"><h2>📰 今天的英文头条，为什么值得逐句精读？</h2>
+<p><strong>AI coding assistants move into the daily workflow of software teams</strong></p>
+<blockquote><p>导读：角色：developer｜CEFR B1｜重点：技术英文阅读（RFC / 事故复盘）+ commit、PR、issue 里的地道表达｜核心词 6 个。建议先读英文原文，再对照中文背景，最后把词卡收进笔记本。</p></blockquote>
+<h3>一、事件原文（B1）</h3>
+<p>What began as an autocomplete curiosity has settled into the routine of mainstream software engineering. According to two surveys released this month, most professional developers now consult an AI coding assistant every working day, chiefly to scaffold tests, to refactor legacy modules and to summarise code they did not write. The productivity claims are credible but uneven. Tasks that are well specified and heavily tested contract noticeably, whereas ambiguous work can expand, because reviewing plausible-looking machine code consumes the same scarce attention as reviewing a junior colleague's pull request. Firms are responding with governance rather than enthusiasm: logging which hunks a model authored, excluding cryptographic and payment paths from generated changes, and running static analysis before merge. The labour market is shifting too. Interview exercises increasingly reward the ability to specify requirements, evaluate proposals and debug unfamiliar output, skills that look less like typing syntax and more like the judgement engineers have always exercised over other people's code.</p>
+<h3>二、中文背景</h3>
+<p>生成式编程助手自 2021 年起规模化商用，2023 年后从补全代码转向生成测试、解释仓库与自动重构。行业调查多以自报数据为主，样本偏向大厂或开源项目，结论常被夸大；安全、许可证与责任归属是企业设置例外条款的主要原因。</p>
+<h3>三、核心词汇精讲（6 个）</h3>
+<h4>1. <strong>assistant</strong> n.｜助手</h4>
+<h4>2. <strong>workflow</strong> n.｜工作流程</h4>
+<h4>3. <strong>generate</strong> v.｜生成</h4>
+<h4>4. <strong>unit test</strong> n. phr.｜单元测试</h4>
+<h4>5. <strong>legacy</strong> adj.｜遗留的</h4>
+<h4>6. <strong>repository</strong> n.｜代码仓库</h4>
+<blockquote><p>⭐ 命中本篇方向关键词：AI、developer tools、engineering culture</p></blockquote>
+<h3>四、长难句拆解</h3>
+<ol><li>Several companies therefore keep a human review step in their pipeline, ban generated code in security-critical modules, and ask teams to record which parts of a change came from a model.</li></ol><ul><li>语法点：并列谓语 + 宾语从句</li><li>讲解：keep / ban / ask 三个动词由 and 连接并共用主语 several companies，第二个 and 前的逗号是英文常见的系列逗号。ask</li></ul>
+<h3>五、收尾任务</h3>
+<p>今日任务：用 3 行英文写一份 incident summary（影响 / 根因 / 后续动作）。</p>
+<hr>
+<p><em>素材：母版 <code>fd677f5ea44ced7f</code>｜角色 <code>developer</code>｜2026-10-27T08:35:55.553740+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow ｜ 觉得有用，点个「在看」收藏这个系列。</em></p></div>
+      </details>
+      <details class="nested">
+        <summary>🎬 短视频口播 <span class="zh">shortvideo · zh · 138 words</span></summary>
+        <div class="markdown"><p>【3秒钩子】每天 30 秒，一条外刊新闻带你把英语用起来👇</p>
+<p>【跟读】What began as an autocomplete curiosity has settled into the routine of mainstream software engineering. 【串讲】生成式编程助手自 2021 年起规模化商用，2023 年后从补全代码转向生成测试、解释仓库与自动重构。行业调查多以自报数。 【核心词】assistant（助手）；workflow（工作流程）；generate（生成） 【结尾】完整词表和音频在主页，评论区回「学习」。明天见👋 #英语口语 #外刊听力 #每日英语打卡</p></div>
+      </details>
+      <details class="nested">
+        <summary>🔥 微博 <span class="zh">weibo · zh · 27 words</span></summary>
+        <div class="markdown"><p>#英语# #外刊# 今日外刊精读：AI coding assistants move into the daily workflow of software teams</p>
+<p>今日词：assistant（助手）</p></div>
+      </details>
+      <details class="nested">
+        <summary>🌐 X / Twitter <span class="zh">x · en · 33 words</span></summary>
+        <div class="markdown"><p>🌐 AI coding assistants move into the daily workflow of software teams</p>
+<p>What began as an autocomplete curiosity has settled into the routine of mainstream software engineering …</p>
+<p>Today's words: assistant, workflow, generate #CodingAssistants #LearnEnglish</p></div>
+      </details>
+      <details class="nested">
+        <summary>💼 LinkedIn <span class="zh">linkedin · en · 543 words</span></summary>
+        <div class="markdown"><p>💼 Today's AI headline, graded for busy professionals.</p>
+<p>What happened</p>
+<p>What began as an autocomplete curiosity has settled into the routine of mainstream software engineering. According to two surveys released this month, most professional developers now consult an AI coding assistant every working day, chiefly to scaffold tests, to refactor legacy modules and to summarise code they did not write. The productivity claims are credible but uneven. Tasks that are well specified and heavily tested contract noticeably, whereas ambiguous work can expand, because reviewing plausible-looking machine code consumes the same scarce attention as reviewing a junior colleague's pull request. Firms are responding with governance rather than enthusiasm: logging which hunks a model authored, excluding cryptographic and payment paths from generated changes, and running static analysis before merge. The labour market is shifting too. Interview exercises increasingly reward the ability to specify requirements, evaluate proposals and debug unfamiliar output, skills that look less like typing syntax and more like the judgement engineers have always exercised over other people's code.</p>
+<p>Why this matters if you work in English</p>
+<p>Stories like this one are dense with words such as AI and developer tools. Reading one graded news piece a day moves vocabulary from passive recognition to the language you actually use in meetings, memos and email threads — without memorising word lists.</p>
+<p>Vocabulary to know • assistant (n) — A program that helps a person complete a task, often by suggesting the next step. In context: She keeps the coding assistant open all day but reads every suggestion before accepting … • workflow (n) — The ordered set of steps a team follows to turn work from start to finish. In context: Adding a review step to the workflow slowed releases but cut the number of … • generate (v) — To produce something, especially text or code, by machine rather than by hand. In context: The tool can generate tests for a function in seconds. • unit test (n. phr) — A small automated check that one piece of code behaves as expected. In context: No change reaches the main branch without a passing unit test. • legacy (adj) — Relating to old program code that is still in use and usually hard to change safely. In context: The assistant explained the legacy module better than the missing documentation did. • repository (n) — The stored collection of a project's files and their revision history. In context: A new engineer can now explore the whole repository without asking for a tour. • review (n. / v) — A careful examination of work by another person before it is accepted. In context: Human review remains the last line of defence against plausible but wrong code. • vulnerable (adj) — Exposed to damage, attack or error. In context: Payment modules are considered too vulnerable to accept machine-written changes.</p>
+<p>A structure worth stealing • Several companies therefore keep a human review step in their pipeline, ban generated code in security-critical modules, and ask teams to record which parts of a change came from a model. • Tasks that are well specified and heavily tested contract noticeably, whereas ambiguous work can expand.</p>
+<p>I publish a CEFR-graded news lesson every day — A1 to C2 texts, bilingual notes, audio and a short quiz. Follow EnglishFoundry and save one headline a day. Today's piece: https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow</p>
+<p>#CodingAssistants #LanguageLearning #EnglishForProfessionals</p></div>
+      </details>
+    </details>
+
+    <p class="role-story-foot">
+      <a class="btn btn-small" href="../story/fd677f5ea44ced7f.html">Full lesson 完整课（词汇 / 语法 / 练习）</a>
+<a class="btn btn-small" href="https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow" target="_blank" rel="noopener noreferrer">Original 原文 ↗</a>    </p>
+  </article>
 </section>
 
 <section class="band" aria-labelledby="others-title">
   <h2 id="others-title">Also worth reading 其他篇目</h2>
   <ul class="mini-list">
-    <li><a href="../story/demo-eu-data-fine.html">European regulators fine a social network 430 million euros over data transfers</a><span class="zh">2026-10-27 · News</span></li>
+    <li><a href="../story/b4a010656a8bd2f1.html">European regulators fine a social network 430 million euros over data transfers</a><span class="zh">2026-10-27 · News · 🎧</span></li>
   </ul>
 </section>
 
@@ -123,13 +228,13 @@
     </table>
   </div>
   <p class="band-lede">Filter the home page by category to find more: 回首页可按类别筛选：
-News 新闻（1）。
+News 新闻（1）、Tech 科技（1）。
   </p>
 </section>
 </main>
 <footer class="site-footer">
   <p class="footer-brand"><strong>EnglishFoundry</strong> · Daily English, levelled for you — 静态站点，无后端、无 CDN，双击 <code>index.html</code> 即可离线阅读。</p>
-  <p class="footer-stats">Built 2026-10-27 16:09 UTC · 1 stories 篇 · 12 roles 角色 · 6 platforms 平台 · 0 audio clips 音频</p>
+  <p class="footer-stats">Built 2026-10-27 16:35 UTC · 2 stories 篇 · 12 roles 角色 · 6 platforms 平台 · 2 audio clips 音频</p>
   <p class="footer-note">Text is adapted from public English sources for language study; original copyright stays with the publishers. 原文版权归来源所有。<a href="../about.html">About 关于本站</a></p>
 </footer>
 <script src="../static/app.js" defer></script>

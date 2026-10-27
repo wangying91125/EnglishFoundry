@@ -1,0 +1,74 @@
+# 🛂 AI coding helpers join the daily workflow
+
+> 角色：**移民留学/海外生活**（`immigration`）
+> 难度：A2 ｜ 词数上限：1150
+> 讲解风格：生活场景陪练：每句话都能在柜台、诊所、房东面前直接说出口，附中文对照
+> 本篇重点：办事/就医/租房/银行/校园场景的高频句与关键名词
+> 题材契合：命中 1/11 个方向关键词 → rule
+
+## 📖 正文 · CEFR A2
+
+**AI coding helpers join the daily workflow**
+
+AI coding assistants are now part of the daily work of many software teams. They suggest the next lines of code, write simple tests and explain old programs. Two surveys published this month say most developers use such a tool at least once a day. Teams like them for boring tasks, but senior engineers still review the results, because the tools can produce code that looks right and fails later.
+
+## 🔎 逐句精读
+
+- Artificial intelligence coding assistants have moved from a novelty to an ordinary part of the working day for many software teams.
+  - 译：对许多软件团队而言，AI 编程助手已从新鲜玩意变成日常工作里的寻常一员。
+- Two industry surveys published this month suggest that a majority of professional developers now open an assistant at least once per working day.
+  - 译：本月发布的两份行业调查显示，多数职业开发者现在每个工作日至少会打开一次编程助手。
+- Yet the evidence also carries a warning: models sometimes produce code that compiles, passes a weak test and still hides a subtle error.
+  - 译：但证据同时也附有警示：模型有时给出的代码能够编译、能通过松散的测试，却仍藏着不易察觉的错误。
+- Several companies therefore keep a human review step in their pipeline and exclude security-critical modules from generated changes.
+  - 译：因此一些公司仍在流程中保留人工评审环节，并把安全攸关的模块排除在自动生成改动之外。
+
+## 📚 核心词汇（10 个）
+
+| # | 单词 | 词性 | 中文 | 英文释义 | 例句 |
+| --- | --- | --- | --- | --- | --- |
+| 1 | **assistant** | n. | 助手；（软件）助理程序 | A program that helps a person complete a task, often by suggesting the next step. | She keeps the coding assistant open all day but reads every suggestion before accepting … |
+| 2 | **workflow** | n. | 工作流程 | The ordered set of steps a team follows to turn work from start to finish. | Adding a review step to the workflow slowed releases but cut the number of … |
+| 3 | **generate** | v. | 生成；产生 | To produce something, especially text or code, by machine rather than by hand. | The tool can generate tests for a function in seconds. |
+| 4 | **unit test** | n. phr. | 单元测试 | A small automated check that one piece of code behaves as expected. | No change reaches the main branch without a passing unit test. |
+| 5 | **legacy** | adj. | 遗留的；旧系统产生的 | Relating to old program code that is still in use and usually hard to change safely. | The assistant explained the legacy module better than the missing documentation did. |
+| 6 | **repository** | n. | 代码仓库 | The stored collection of a project's files and their revision history. | A new engineer can now explore the whole repository without asking for a tour. |
+| 7 | **review** | n. / v. | 评审；检查 | A careful examination of work by another person before it is accepted. | Human review remains the last line of defence against plausible but wrong code. |
+| 8 | **vulnerable** | adj. | 易受攻击的；脆弱的 | Exposed to damage, attack or error. | Payment modules are considered too vulnerable to accept machine-written changes. |
+| 9 | **scaffold** | v. | 搭骨架；生成框架代码 | To create the basic structure of something so that details can be added later. | He asked the tool to scaffold the API and then rewrote half of it. |
+| 10 | **throughput** | n. | 产出率；吞吐量 | The amount of work a system completes in a given period. | Team throughput rose by a fifth, though review comments rose with it. |
+
+> ⭐ 命中的 **移民留学/海外生活** 方向关键词：rule
+
+## 🗣 开口说
+
+1. Your team adopts a coding assistant tomorrow. Which two tasks do you allow it to do without review, and why?
+2. Some argue that generated code should always be labelled in the commit history. Do you agree, and who should check the label?
+3. If an assistant makes a junior engineer twice as fast, should the salary of that role change? Explain your reasoning.
+
+**角色扮演**：The release meeting
+
+- 场景：A feature built with an AI assistant contains a subtle bug that costs the company a day of lost orders. The engineering lead, who pushed for adoption, and the finance lead, who pays for incidents, must agree on rules before the next release.
+- 角色：Engineering lead: defend the speed gains, propose carve-outs and a provenance log.
+- 角色：Finance lead: quantify the incident, insist on review for payment code, ask who owns the mistake.
+- 任务：Talk for three minutes and leave the room with exactly three written rules. Use at least four words from today's vocabulary, and state which rule costs the team the most time.
+
+## 📝 小练习（2 题）
+
+1. According to the two surveys, what do most professional developers now do every working day?
+2. Why do several companies keep a human review step?
+
+<details>
+<summary>✅ 参考答案与解析（点击展开）</summary>
+
+答案速查：1.A　2.B
+
+</details>
+
+## 🎯 收尾任务
+
+今日任务：3 个口语问题各答 30 秒并录音，整理去柜台要问的 5 个英文句子。
+
+---
+*EnglishFoundry：母版 `fd677f5ea44ced7f`（fd677f5ea44ced7f.json） × 角色 `immigration`（A2 / 上限 1150 词）*
+*配音建议：au_female · -5%*
