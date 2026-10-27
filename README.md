@@ -135,7 +135,7 @@ python -m foundry.site --limit 2 --no-audio                       # 冒烟：只
 - **纯静态**：无后端、无构建工具、无 CDN、无外部字体；搜索与筛选是原生 JS 在浏览器里对卡片 `data-roles` / `data-category` / `data-search` 做的过滤，不 `fetch` 任何 JSON，所以双击 `file://` 打开 `web/index.html` 也能用。
 - 设计：浅色主题 + 系统字体栈，移动端响应式（`auto-fit` 网格、粘性导航、可横向滚动的档位条）；英文内容为主，导航与小节标题带中文说明；每个板块缺内容就整段不渲染，不会出现空壳。
 - 音频：详情页与首页都列出 `<audio controls>` 播放器与 `download` 下载入口，mp3 复制进 `web/audio/`，`web/` 整目录即可直接部署；倍速按钮（0.75×–1.5×）走 `playbackRate` 并记住偏好。
-- 母版 JSON 只有 9 个内容键，标题/来源/类别/时间不保证有：能读就读（顶层键或 `meta` / `story` 段），读不到就用 B1 标题、`news` 类别与文件时间兜底；`output/posts` 里现成的角色 Markdown 优先认领（`posts/<role>.md`、`posts/<story_id>/<role>.md`、`posts/<role>/<platform>.md`），没有才现场调 `render_for_role()` 渲染。
+- 母版 JSON 只有 9 个内容键，标题/来源/类别/时间不保证有：能读就读（顶层键或 `meta` / `story` 段），读不到就用 B1 标题、`news` 类别与文件时间兜底；`output/posts` 里现成的角色 Markdown 优先认领（`posts/<role>.md`、`posts/<story_id>/<role>.md`、`posts/<role>/<platform>.md`、`posts/<story_id>/<role>/<platform>.md`），没有才现场调 `render_for_role()` 渲染。
 - 角色标签来自 `topic_match()` 的题材契合度（命中关键词才标，全都没命中时按难度偏好回退），首页角色筛选与角色页内容用的是同一份归属关系；坏 JSON、缺配置、缺音频都只降级并告警，单篇失败不拖垮整站。
 - 重建默认清理 `web/story` / `web/role` / `web/audio` 里上一版遗留的产物（`--no-prune` 保留），模板目录永不动。
 
