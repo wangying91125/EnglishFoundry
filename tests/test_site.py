@@ -19,6 +19,7 @@ from foundry.site import (
     AudioClip,
     SiteError,
     build_site,
+    collect_stories,
     discover_posts,
     load_audio_clips,
     markdown_to_html,
@@ -461,3 +462,14 @@ def test_prune_removes_stale_audio_copies(settings):
         path.unlink()  # 源音频被清掉（重跑流水线时很常见）
     build_site(settings, packs=[FIXTURE])
     assert not copied.exists(), "站点里的过期音频副本该被 prune 掉"
+
+
+def test_collect_stories_sorts_and_tags(settings):
+    write_pack(project := settings.root, "demo-old", category="news", published="2026-10-20T00:00:00+00:00")
+    write_pack(project, "demo-new", category="tech", published="2026-10-27T00:00:00+00:00", title="Newer container story")
+    stories = collect_stories(settings)
+    assert [story.id for story in stories] == ["demo-new", "demo-old"], "新的排前面（首页今日精选就取第一篇）"
+    assert stories[0].title == "Newer container story"
+    assert stories[0].roles and "container" in stories[0].search
+    assert [story.id for story in collect_stories(settings, limit=1)] == ["demo-new"]
+    assert collect_stories(settings, packs=[] ) == []
