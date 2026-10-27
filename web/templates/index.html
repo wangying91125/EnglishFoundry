@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block content %}
+{% if featured %}
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-main">
+    <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Today&rsquo;s pick · 今日精选
+      {% if featured.date_label %}<time datetime="{{ featured.iso_date }}">{{ featured.date_label }}</time>{% endif %}
+    </p>
+    <h1 id="hero-title">{{ featured.title }}</h1>
+    {% if featured.summary %}<p class="lede">{{ featured.summary }}</p>{% endif %}
+    <ul class="pill-row" aria-label="Level and topic 难度与类别">
+      <li class="pill pill-cat">{{ featured.category_en }}{% if featured.category_zh %} <span class="zh">{{ featured.category_zh }}</span>{% endif %}</li>
+      {% for level in featured.levels %}
+      <li class="pill">{{ level.level }}{% if level.hint %} <span class="zh">{{ level.hint }}</span>{% endif %}</li>
+      {% endfor %}
+      <li class="pill pill-ghost">{{ featured.words_total }} words</li>
+    </ul>
+    <div class="actions">
+      <a class="btn btn-primary" href="{{ root }}{{ featured.href }}">Start reading 开始精读</a>
+      <a class="btn" href="{{ root }}{{ featured.href }}#listening">Listen &amp; repeat 听力跟读</a>
+    </div>
+    {% if featured.audio %}
+    <div class="mini-player">
+      <audio controls preload="none" src="{{ root }}{{ featured.audio[0].url }}"></audio>
+      <a class="download" href="{{ root }}{{ featured.audio[0].url }}" download>Download MP3 下载{% if featured.audio[0].size_label %} · {{ featured.audio[0].size_label }}{% endif %}</a>
+    </div>
+    {% endif %}
+  </div>
+  <aside class="hero-side" aria-labelledby="ladder-title">
+    <h2 id="ladder-title">Read at your level 按难度读</h2>
+    <ol class="ladder">
+      {% for level in featured.levels %}
+      <li>
+        <a href="{{ root }}{{ featured.href }}#level-{{ level.level }}">
+          <b>{{ level.level }}</b>
+          <span class="zh">{{ level.hint or '分级' }}</span>
+          <em>{{ level.words }} words · {{ level.minutes or '–' }}</em>
+        </a>
+      </li>
+      {% endfor %}
+    </ol>
+    {% if featured.vocabulary %}<p class="side-note">{{ featured.vocabulary|length }} key words tagged today · 今日核心词{{ featured.vocabulary|length }} 个。</p>{% endif %}
+  </aside>
+</section>
+{% else %}
+<section class="hero hero-empty">
+  <h1>{{ site_tagline }}</h1>
+  <p class="lede">No content packs yet. Run the pipeline, then rebuild this site: 还没有内容，先跑流水线再生成站点。</p>
+  <pre><code>python scripts/run_daily.py --dry-run
+python -m foundry.site</code></pre>
+</section>
+{% endif %}
+
+<section class="toolbar" id="library" aria-label="Search and filters 搜索与筛选">
+  <div class="search-row">
+    <div class="search-wrap">
+      <label class="sr-only" for="site-search">Search stories 搜索故事</label>
+      <input id="site-search" type="search" data-search placeholder="Search stories, words, topics… 搜标题 / 生词 / 话题" autocomplete="off">
+      <button type="button" class="btn btn-tiny" data-clear hidden>Clear ✕</button>
+    </div>
+    <p class="result-count" data-result-count aria-live="polite">{{ stories|length }} stories 篇</p>
+  </div>
+  {% if role_catalog %}
+  <div class="chips" data-filter-group="role">
+    <span class="chips-label">Roles 角色</span>
+    <button type="button" class="chip is-active" data-filter-value="all" aria-pressed="true">All 全部</button>
+    {% for role in role_catalog %}
+    <button type="button" class="chip" data-filter-value="{{ role.key }}" aria-pressed="false">{{ role.emoji }} {{ role.name }}</button>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if categories %}
+  <div class="chips" data-filter-group="category">
+    <span class="chips-label">Categories 类别</span>
+    <button type="button" class="chip is-active" data-filter-value="all" aria-pressed="true">All 全部</button>
+    {% for item in categories %}
+    <button type="button" class="chip" data-filter-value="{{ item.key }}" aria-pressed="false">{{ item.en }}{% if item.zh %} {{ item.zh }}{% endif %} <b>{{ item.count }}</b></button>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+
+<div class="story-grid" data-story-grid>
+  {% for story in stories %}
+  <article class="card story-card" data-roles="{{ story.roles|join(' ') }}" data-category="{{ story.category }}" data-search="{{ story.search }}">
+    <header class="card-head">
+      <p class="card-meta">
+        {% if story.date_label %}<time datetime="{{ story.iso_date }}">{{ story.date_label }}</time> ·{% endif %}
+        {{ story.category_en }}{% if story.category_zh %} <span class="zh">{{ story.category_zh }}</span>{% endif %}
+        {%- if story.source %} · {{ story.source }}{% endif %}
+      </p>
+      <h3 class="card-title"><a href="{{ root }}{{ story.href }}">{{ story.title }}</a></h3>
+    </header>
+    {% if story.summary %}<p class="card-sum">{{ story.summary|clip(170) }}</p>{% endif %}
+    <ul class="pill-row pill-row-small">
+      {% for level in story.levels %}<li class="pill">{{ level.level }}</li>{% endfor %}
+      {% if story.vocabulary %}<li class="pill pill-ghost">{{ story.vocabulary|length }} words</li>{% endif %}
+      {% if story.audio %}<li class="pill pill-audio">🎧 {{ story.audio|length }}</li>{% endif %}
+    </ul>
+    {% if story.audio %}
+    <div class="card-audio">
+      <audio controls preload="none" src="{{ root }}{{ story.audio[0].url }}"></audio>
+      <a class="download" href="{{ root }}{{ story.audio[0].url }}" download title="下载 MP3">⬇ MP3</a>
+    </div>
+    {% endif %}
+    <footer class="card-foot">
+      <a class="btn btn-small" href="{{ root }}{{ story.href }}">Read 精读</a>
+      {% for tag in story.role_pages[:3] %}<a class="tag" href="{{ root }}{{ tag.href }}">{{ tag.name }}</a>{% endfor %}
+    </footer>
+  </article>
+  {% endfor %}
+</div>
+<p class="empty-state" data-empty-state hidden>
+  Nothing matches. 没有符合条件的篇目。
+  <button type="button" class="btn btn-tiny" data-reset>Reset filters 清空筛选</button>
+</p>
+
+{% if clips %}
+<section class="band" id="listening" aria-labelledby="listening-title">
+  <h2 id="listening-title">Listening library 听力下载</h2>
+  <p class="band-lede">Every clip is synthesized locally with free edge-tts. 音频由 edge-tts 免费合成，可离线下载跟读。</p>
+  <ul class="clip-list">
+    {% for clip in clips %}
+    <li class="clip">
+      <div class="clip-info">
+        <p class="clip-title">{{ clip.label or clip.key }}</p>
+        <p class="clip-meta">
+          {% if clip.duration_label %}<span>{{ clip.duration_label }}</span>{% endif %}
+          {% if clip.size_label %}<span>{{ clip.size_label }}</span>{% endif %}
+          {% if clip.voice %}<span>{{ clip.voice }}</span>{% endif %}
+          {% if clip.rate %}<span>{{ clip.rate }}</span>{% endif %}
+        </p>
+      </div>
+      <audio controls preload="none" src="{{ root }}{{ clip.url }}"></audio>
+      <a class="download" href="{{ root }}{{ clip.url }}" download>Download 下载</a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if role_catalog %}
+<section class="band" id="roles" aria-labelledby="roles-title">
+  <h2 id="roles-title">Learn by role 按角色精读</h2>
+  <p class="band-lede">One story, twelve personas — the same pack rewritten for your exam or job. 同一篇母版，12 个角色各出一版。</p>
+  <div class="role-grid">
+    {% for role in role_catalog %}
+    <a class="role-card" href="{{ root }}{{ role.href }}">
+      <span class="role-emoji" aria-hidden="true">{{ role.emoji }}</span>
+      <span class="role-name">{{ role.name }}</span>
+      <span class="role-key">{{ role.key }}</span>
+      <span class="role-levels">{{ role.levels|join(' / ') }}</span>
+      {% if role.focus %}<span class="role-focus">{{ role.focus|clip(60) }}</span>{% endif %}
+      <span class="role-count">{{ role.count }} stories 篇</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}
