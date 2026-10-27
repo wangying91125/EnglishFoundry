@@ -65,4 +65,4 @@ Europe says a big social app did something wrong. The app took people's info and
 今日任务：和爸爸妈妈一起读完故事，学会 12 个词，再回答 3 个小问题。
 
 ---
-*素材：母版 `b4a010656a8bd2f1`｜角色 `kids`｜2026-10-27T11:42:29.730955+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/eu-regulators-fine-social-network ｜ 觉得有用，点个「在看」收藏这个系列。*
+*素材：母版 `b4a010656a8bd2f1`｜角色 `kids`｜2026-10-27T18:29:06.551221+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/eu-regulators-fine-social-network ｜ 觉得有用，点个「在看」收藏这个系列。*

@@ -35,4 +35,4 @@ What began as an autocomplete curiosity has settled into the routine of mainstre
 今日任务：用 claim-reason-example 写一段 80 词主体段，再录音回答 3 个口语题。
 
 ---
-*素材：母版 `fd677f5ea44ced7f`｜角色 `ielts_toefl`｜2026-10-27T08:42:29.730955+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow ｜ 觉得有用，点个「在看」收藏这个系列。*
+*素材：母版 `fd677f5ea44ced7f`｜角色 `ielts_toefl`｜2026-10-27T15:29:06.551221+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow ｜ 觉得有用，点个「在看」收藏这个系列。*

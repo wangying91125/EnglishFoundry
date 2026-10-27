@@ -61,4 +61,4 @@ Regulators in the European Union have fined a large social network 430 million e
 今日任务：写一条 40 词站内通知 + 3 句差评安抚话术，用掉今天 5 个词。
 
 ---
-*素材：母版 `b4a010656a8bd2f1`｜角色 `crossborder`｜2026-10-27T11:42:29.730955+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/eu-regulators-fine-social-network ｜ 觉得有用，点个「在看」收藏这个系列。*
+*素材：母版 `b4a010656a8bd2f1`｜角色 `crossborder`｜2026-10-27T18:29:06.551221+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/eu-regulators-fine-social-network ｜ 觉得有用，点个「在看」收藏这个系列。*

@@ -51,4 +51,4 @@ Regulators in the European Union have fined a large social network 430 million e
 今日任务：把这则新闻改写成 3 句英文周报要点 + 1 封给客户的说明邮件。
 
 ---
-*素材：母版 `b4a010656a8bd2f1`｜角色 `business`｜2026-10-27T11:42:29.730955+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/eu-regulators-fine-social-network ｜ 觉得有用，点个「在看」收藏这个系列。*
+*素材：母版 `b4a010656a8bd2f1`｜角色 `business`｜2026-10-27T18:29:06.551221+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/eu-regulators-fine-social-network ｜ 觉得有用，点个「在看」收藏这个系列。*
