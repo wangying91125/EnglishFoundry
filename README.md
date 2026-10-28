@@ -175,10 +175,11 @@ python -m foundry.pipeline --dry-run --limit 2       # 等价入口（脚本只�
 
 ## 云端保存与断点恢复
 
-引导脚本会启动 `scripts/cloud-sync.sh`，每 30 秒将工作区未提交的文件保存并推送到当前分支；任务阶段和 Codex 模块状态写入 `output/.progress/`，模块完成后立即推送。`.env`、`.foundry-state/` 等密钥/本地运行状态仍由 `.gitignore` 排除。同步依赖已登录且有推送权限的 GitHub `origin`；断网期间保留本地修改，恢复联网后自动重试。重新创建 Codespace 时，请先 `git pull` 获取最新内容。
+引导脚本会启动 `scripts/cloud-sync.sh`，每 30 秒将工作区未提交的文件保存并推送到当前分支；任务阶段和 Codex 模块状态写入 `output/.progress/`，模块完成后立即推送。每次启动 bootstrap、进入新阶段和开始/重试 Codex 模块前，都会先从 `origin` 刷新最新版；刷新失败时不会用无法确认的旧版本开始任务。重复运行 `setup` 或 `all` 时，如果模块提示词已经存在，会保留云端版本而不重新覆盖。`.env`、`.foundry-state/` 等密钥/本地运行状态仍由 `.gitignore` 排除。断网期间的文件和进度保留在工作区，后台同步会持续重试；网络恢复后再次运行 bootstrap 会先拉取云端更新，再从未完成模块继续。
 
 ```bash
 bash scripts/cloud-sync.sh status  # 查看同步状态
+bash scripts/cloud-sync.sh refresh # 只从云端加载最新版
 bash scripts/cloud-sync.sh start   # 启动或重启同步
 bash bootstrap.sh build            # 从首个未完成模块继续，已完成模块会跳过
 bash scripts/cloud-sync.sh stop   # 停止后台同步

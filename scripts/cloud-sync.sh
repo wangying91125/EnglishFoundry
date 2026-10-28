@@ -12,19 +12,40 @@ LOCK_FILE="$STATE_DIR/cloud-sync.lock"
 INTERVAL="${CLOUD_SYNC_INTERVAL:-30}"
 mkdir -p "$STATE_DIR"
 
+acquire_lock(){
+  exec 9>"$LOCK_FILE"
+  if ! flock -w "${CLOUD_SYNC_LOCK_WAIT:-60}" 9; then
+    printf '%s timed out waiting for the cloud sync lock\n' "$(date -u +%FT%TZ)" >> "$LOG_FILE"
+    return 1
+  fi
+}
+
+refresh_under_lock(){
+  local branch="$1" remote_branch
+  if ! remote_branch="$(git -C "$ROOT" ls-remote --heads origin "$branch" 2>> "$LOG_FILE")"; then
+    printf '%s unable to check remote branch; local files were kept\n' "$(date -u +%FT%TZ)" >> "$LOG_FILE"
+    return 1
+  fi
+  if [[ -n "$remote_branch" ]] && ! git -C "$ROOT" pull --rebase --autostash origin "$branch" >> "$LOG_FILE" 2>&1; then
+    printf '%s remote update conflict; resolve it before autosave can continue\n' "$(date -u +%FT%TZ)" >> "$LOG_FILE"
+    return 1
+  fi
+}
+
+refresh_latest(){
+  local branch
+  branch="$(git -C "$ROOT" branch --show-current)"
+  [[ -n "$branch" ]] || return 1
+  acquire_lock || return 1
+  refresh_under_lock "$branch"
+}
+
 sync_once(){
   local branch
   branch="$(git -C "$ROOT" branch --show-current)"
   [[ -n "$branch" ]] || return 1
-  exec 9>"$LOCK_FILE"
-  flock -n 9 || return 0
-
-  if git -C "$ROOT" ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
-    if ! git -C "$ROOT" pull --rebase --autostash origin "$branch" >> "$LOG_FILE" 2>&1; then
-      printf '%s remote update conflict; resolve it before autosave can continue\n' "$(date -u +%FT%TZ)" >> "$LOG_FILE"
-      return 1
-    fi
-  fi
+  acquire_lock || return 1
+  refresh_under_lock "$branch" || return 1
 
   git -C "$ROOT" add -A
   if ! git -C "$ROOT" diff --cached --quiet; then
@@ -71,6 +92,9 @@ case "${1:-status}" in
   sync-once)
     sync_once
     ;;
+  refresh)
+    refresh_latest
+    ;;
   worker)
     worker
     ;;
@@ -93,7 +117,7 @@ case "${1:-status}" in
     fi
     ;;
   *)
-    printf '用法：bash scripts/cloud-sync.sh [start|stop|status|sync-once]\n' >&2
+    printf '用法：bash scripts/cloud-sync.sh [start|stop|status|refresh|sync-once]\n' >&2
     exit 2
     ;;
 esac

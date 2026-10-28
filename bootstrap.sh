@@ -19,6 +19,9 @@ ok(){ printf '%s[成功]%s %s\n' "$C_G" "$C_0" "$1"; }
 warn(){ printf '%s[注意]%s %s\n' "$C_Y" "$C_0" "$1"; }
 err(){ printf '%s[出错]%s %s\n' "$C_R" "$C_0" "$1"; }
 step(){
+	if [[ "$CLOUD_SYNC_READY" == "1" ]]; then
+		refresh_latest || exit 1
+	fi
 	printf '\n%s▸ %s%s\n' "$C_B$C_BLUE" "$1" "$C_0"
 	if [[ -d "$APP_DIR/output/.progress" ]]; then
 		printf '%s %s\n' "$(date -u +%FT%TZ)" "$1" >> "$APP_DIR/output/.progress/run.log"
@@ -35,22 +38,32 @@ CODEX_MODEL="${FOUNDRY_CODEX_MODEL:-qwen3.8-flash}"
 RUNTIME_MODEL="${FOUNDRY_RUNTIME_MODEL:-qwen-plus}"
 mkdir -p "$STATE_DIR"
 PROGRESS_DIR="$APP_DIR/output/.progress/modules"
+CLOUD_SYNC_READY=0
+
+refresh_latest(){
+	if ! bash "$APP_DIR/scripts/cloud-sync.sh" refresh; then
+		err "无法确认云端最新版；已停止本阶段，工作区修改会保留，联网后请重试。"
+		return 1
+	fi
+}
 
 phase_cloud_sync(){
 	step "云端自动保存与任务恢复"
 	mkdir -p "$PROGRESS_DIR"
+	if [[ -f "$APP_DIR/scripts/cloud-sync.sh" ]]; then
+		bash "$APP_DIR/scripts/cloud-sync.sh" start || return 1
+		refresh_latest || return 1
+		CLOUD_SYNC_READY=1
+	else
+		err "缺少 scripts/cloud-sync.sh，无法启动云端自动保存"
+		return 1
+	fi
 	local marker
 	for marker in "$STATE_DIR"/mod_*.done; do
 		[[ -f "$marker" ]] || continue
 		cp -n "$marker" "$PROGRESS_DIR/$(basename "$marker")"
 	done
-	if [[ -f "$APP_DIR/scripts/cloud-sync.sh" ]]; then
-		bash "$APP_DIR/scripts/cloud-sync.sh" start || return 1
-		bash "$APP_DIR/scripts/cloud-sync.sh" sync-once || warn "首次云端检查点推送失败；自动保存器会继续重试"
-	else
-		err "缺少 scripts/cloud-sync.sh，无法启动云端自动保存"
-		return 1
-	fi
+	bash "$APP_DIR/scripts/cloud-sync.sh" sync-once || warn "首次云端检查点推送失败；本地修改保留，自动保存器会继续重试"
 }
 
 # =============================================================================
@@ -313,6 +326,7 @@ run_codex_module(){
 	local name; name="$(basename "$prompt_file" .md)"
 	local marker="$PROGRESS_DIR/mod_${name}.done"
 	local status="$PROGRESS_DIR/mod_${name}.status"
+	refresh_latest || return 1
 	if [[ -f "$marker" ]]; then info "模块 $name 已完成，跳过"; return 0; fi
 	mkdir -p "$PROGRESS_DIR"
 	printf 'running %s\n' "$(date -u +%FT%TZ)" > "$status"
@@ -322,6 +336,7 @@ run_codex_module(){
 	info "Codex 正在生成模块 $name（可在下方实时看到它的动作）..."
 	local tries=0 done_f=0
 	while (( tries < 3 )); do
+		refresh_latest || return 1
 		if codex exec --skip-git-repo-check -C "$APP_DIR" "$(cat "$prompt_file")"; then
 			done_f=1; break
 		fi
@@ -329,6 +344,7 @@ run_codex_module(){
 	done
 	if [[ "$done_f" != "1" ]]; then
 		printf 'failed %s\n' "$(date -u +%FT%TZ)" > "$status"
+		bash "$APP_DIR/scripts/cloud-sync.sh" sync-once || warn "失败状态暂未推送；本地进度仍已保留"
 		err "模块 $name 三次失败。可手动修复：在终端运行 cd $APP_DIR && codex，粘贴 $prompt_file 内容。"
 		return 1
 	fi
@@ -501,16 +517,24 @@ phase_summary(){
 	line
 }
 
+phase_prepare_scaffold(){
+	if [[ -s "$APP_DIR/prompts/build/00_base.md" ]]; then
+		info "检测到已有云端脚手架与模块提示词，保留最新版文件"
+		return 0
+	fi
+	phase_scaffold && phase_write_prompts
+}
+
 # =============================================================================
 # 主调度
 # =============================================================================
 case "${1:-all}" in
-	setup)  phase_check_env && phase_collect_keys && phase_install_codex && phase_scaffold && phase_write_prompts && phase_cloud_sync ;;
-	build)  phase_scaffold && phase_write_prompts && phase_cloud_sync && phase_build ;;
+	setup)  phase_cloud_sync && phase_check_env && phase_collect_keys && phase_install_codex && phase_prepare_scaffold ;;
+	build)  phase_cloud_sync && phase_build ;;
 	test)   phase_cloud_sync && phase_test ;;
 	deploy) phase_cloud_sync && phase_workflows && phase_git && phase_deploy && phase_summary ;;
 	all)
-		phase_cloud_sync && phase_check_env && phase_collect_keys && phase_install_codex && phase_scaffold && phase_write_prompts \
+		phase_cloud_sync && phase_check_env && phase_collect_keys && phase_install_codex && phase_prepare_scaffold \
 			&& phase_build && phase_test && phase_workflows && phase_git && phase_deploy && phase_summary
 		;;
 	*) echo "用法：bash bootstrap.sh [setup|build|test|deploy|all]"; exit 1 ;;
