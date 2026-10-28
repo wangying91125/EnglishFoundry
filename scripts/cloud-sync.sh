@@ -9,6 +9,7 @@ STATE_DIR="$ROOT/.foundry-state"
 PID_FILE="$STATE_DIR/cloud-sync.pid"
 LOG_FILE="$STATE_DIR/cloud-sync.log"
 LOCK_FILE="$STATE_DIR/cloud-sync.lock"
+RUN_LOCK="$STATE_DIR/cloud-run.lock"
 INTERVAL="${CLOUD_SYNC_INTERVAL:-30}"
 mkdir -p "$STATE_DIR"
 
@@ -44,10 +45,28 @@ sync_once(){
   local branch
   branch="$(git -C "$ROOT" branch --show-current)"
   [[ -n "$branch" ]] || return 1
+<<<<<<< Updated upstream
   acquire_lock || return 1
   refresh_under_lock "$branch" || return 1
+=======
+  exec 9>"$LOCK_FILE"
+  flock -n 9 || return 0
 
-  git -C "$ROOT" add -A
+  exec 8>"$RUN_LOCK"
+  if flock -s -n 8; then
+    if git -C "$ROOT" ls-remote --heads origin "refs/heads/$branch" >> "$LOG_FILE" 2>&1; then
+      if ! git -C "$ROOT" pull --rebase --autostash origin "$branch" >> "$LOG_FILE" 2>&1; then
+        printf '%s remote update conflict; resolve it before autosave can continue\n' "$(date -u +%FT%TZ)" >> "$LOG_FILE"
+        return 1
+      fi
+    fi
+  else
+    printf '%s run in progress; defer remote pull, save local changes only\n' "$(date -u +%FT%TZ)" >> "$LOG_FILE"
+  fi
+  flock -u 8
+>>>>>>> Stashed changes
+
+  git -C "$ROOT" add -A -- . ':!.vscode/mcp.json'
   if ! git -C "$ROOT" diff --cached --quiet; then
     if ! git -C "$ROOT" commit -m "chore: cloud autosave $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$LOG_FILE" 2>&1; then
       printf '%s commit failed; check git identity and repository status\n' "$(date -u +%FT%TZ)" >> "$LOG_FILE"
@@ -60,6 +79,34 @@ sync_once(){
     printf '%s push failed; will retry\n' "$(date -u +%FT%TZ)" >> "$LOG_FILE"
     return 1
   fi
+}
+
+run_latest(){
+  local branch
+  branch="$(git -C "$ROOT" branch --show-current)"
+  [[ -n "$branch" ]] || return 1
+  exec 8>"$RUN_LOCK"
+  flock -n 8 || { printf '错误：已有云端程序正在运行。\n' >&2; return 1; }
+  exec 9>"$LOCK_FILE"
+  flock 9
+  if ! git -C "$ROOT" ls-remote --heads origin "refs/heads/$branch" >> "$LOG_FILE" 2>&1; then
+    printf '错误：无法连接云端，拒绝使用可能过期的脚本运行。\n' >&2
+    return 1
+  fi
+  if ! git -C "$ROOT" pull --rebase --autostash origin "$branch" >> "$LOG_FILE" 2>&1; then
+    printf '错误：无法合并云端最新版；请查看 %s\n' "$LOG_FILE" >&2
+    return 1
+  fi
+  git -C "$ROOT" add -A -- . ':!.vscode/mcp.json'
+  if ! git -C "$ROOT" diff --cached --quiet; then
+    git -C "$ROOT" commit -m "chore: cloud autosave before run $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$LOG_FILE" 2>&1 || return 1
+  fi
+  if ! git -C "$ROOT" push origin HEAD >> "$LOG_FILE" 2>&1; then
+    printf '%s latest fetched; push deferred and will retry\n' "$(date -u +%FT%TZ)" >> "$LOG_FILE"
+  fi
+  flock -u 9
+  exec 9>&-
+  exec env FOUNDRY_CLOUD_LATEST=1 bash "$ROOT/deepseek_bash_20261028_162950.sh" "$@"
 }
 
 worker(){
@@ -92,8 +139,14 @@ case "${1:-status}" in
   sync-once)
     sync_once
     ;;
+<<<<<<< Updated upstream
   refresh)
     refresh_latest
+=======
+  run-latest)
+    shift
+    run_latest "$@"
+>>>>>>> Stashed changes
     ;;
   worker)
     worker
@@ -117,7 +170,11 @@ case "${1:-status}" in
     fi
     ;;
   *)
+<<<<<<< Updated upstream
     printf '用法：bash scripts/cloud-sync.sh [start|stop|status|refresh|sync-once]\n' >&2
+=======
+    printf '用法：bash scripts/cloud-sync.sh [start|stop|status|sync-once|run-latest]\n' >&2
+>>>>>>> Stashed changes
     exit 2
     ;;
 esac
