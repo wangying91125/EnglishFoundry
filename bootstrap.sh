@@ -39,11 +39,20 @@ RUNTIME_MODEL="${FOUNDRY_RUNTIME_MODEL:-qwen-plus}"
 mkdir -p "$STATE_DIR"
 PROGRESS_DIR="$APP_DIR/output/.progress/modules"
 CLOUD_SYNC_READY=0
+BOOTSTRAP_PATH="$APP_DIR/$(basename "${BASH_SOURCE[0]}")"
+BOOTSTRAP_ARGS=("$@")
+BOOTSTRAP_LOADED_HASH="$(git -C "$APP_DIR" hash-object "$BOOTSTRAP_PATH" 2>/dev/null || true)"
 
 refresh_latest(){
 	if ! bash "$APP_DIR/scripts/cloud-sync.sh" refresh; then
 		err "无法确认云端最新版；已停止本阶段，工作区修改会保留，联网后请重试。"
 		return 1
+	fi
+	local current_hash
+	current_hash="$(git -C "$APP_DIR" hash-object "$BOOTSTRAP_PATH" 2>/dev/null || true)"
+	if [[ -n "$BOOTSTRAP_LOADED_HASH" && "$current_hash" != "$BOOTSTRAP_LOADED_HASH" ]]; then
+		info "bootstrap 已更新，重新启动当前命令以执行最新版"
+		exec bash "$BOOTSTRAP_PATH" "${BOOTSTRAP_ARGS[@]}"
 	fi
 }
 
