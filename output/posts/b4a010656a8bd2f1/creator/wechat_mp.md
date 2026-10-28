@@ -53,4 +53,4 @@ Regulators in the European Union have fined a large social network 430 million e
 今日任务：写 3 个英文标题（悬念/数字/反常识各一），再录 60 秒口播。
 
 ---
-*素材：母版 `b4a010656a8bd2f1`｜角色 `creator`｜2026-10-27T18:29:06.551221+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/eu-regulators-fine-social-network ｜ 觉得有用，点个「在看」收藏这个系列。*
+*素材：母版 `b4a010656a8bd2f1`｜角色 `creator`｜2026-10-27T23:22:29.245499+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/eu-regulators-fine-social-network ｜ 觉得有用，点个「在看」收藏这个系列。*

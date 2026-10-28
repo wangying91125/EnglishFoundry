@@ -49,4 +49,4 @@ AI coding assistants are now part of the daily work of many software teams. They
 今日任务：3 个口语问题各答 30 秒并录音，整理去柜台要问的 5 个英文句子。
 
 ---
-*素材：母版 `fd677f5ea44ced7f`｜角色 `immigration`｜2026-10-27T15:29:06.551221+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow ｜ 觉得有用，点个「在看」收藏这个系列。*
+*素材：母版 `fd677f5ea44ced7f`｜角色 `immigration`｜2026-10-27T20:22:29.245499+00:00，由 EnglishFoundry 自动排版。 阅读原文：https://example.org/englishfoundry/dry-run/ai-coding-assistants-daily-workflow ｜ 觉得有用，点个「在看」收藏这个系列。*

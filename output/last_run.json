@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-27T23:29:06.551221+00:00",
+  "run_at": "2026-10-28T04:22:29.245499+00:00",
   "mode": "dry-run",
   "sources": 4,
   "articles": 4,
@@ -14,7 +14,7 @@
   "limit": 2,
   "packs": 2,
   "site_files": 20,
-  "duration_seconds": 0.74,
+  "duration_seconds": 0.75,
   "stages": {
     "fetch": "ok",
     "normalize": "ok",
