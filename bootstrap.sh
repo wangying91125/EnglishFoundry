@@ -184,8 +184,6 @@ __pycache__/
 *.pyc
 .pytest_cache/
 *.egg-info/
-output/audio/
-output/raw/
 .foundry-state/
 .DS_Store
 EOF
